@@ -125,9 +125,9 @@ svg line, svg path { transition: stroke .8s var(--ease), stroke-width .8s var(--
 
 /* 14장 걸러지는 숫자 */
 .s14-row { display: flex; align-items: baseline; gap: 22px; padding: 6px 0 8px; border-bottom: 1.5px solid var(--line); }
-.s14-row .big { font-size: 56px; width: 120px; flex: none; color: var(--ink); }
+.s14-row .big { font-size: 50px; width: 116px; flex: none; color: var(--ink); }
 .s14-row .big.at { color: var(--at); }
-.s14-row span:last-child { font-size: 23px; color: var(--ink2); }
+.s14-row span:last-child { font-size: 22px; color: var(--ink2); }
 
 /* 15장 차례 칸 */
 .s15-c { height: 160px; margin-bottom: 18px; border-radius: 18px; background: var(--card); border: 1.5px solid var(--line); padding: 24px 26px; display: flex; gap: 18px; transition: background .6s var(--ease), border-color .6s var(--ease), opacity .6s var(--ease); }
@@ -157,3 +157,8 @@ svg line, svg path { transition: stroke .8s var(--ease), stroke-width .8s var(--
 .s14-holo .key { position: absolute; left: 28px; bottom: 20px; display: flex; gap: 26px; font-size: 18px; color: var(--mut); }
 .s14-holo .key i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 8px; vertical-align: -1px; }
 .s14-holo .k-g { background: var(--g2); } .s14-holo .k-a { background: var(--a); } .s14-holo .k-c { border: 2px solid var(--ink2); border-radius: 50%; }
+.s14-d .ttl { font-size: 26px; font-weight: 650; margin-bottom: 8px; }
+.s14-d .r { display: flex; align-items: baseline; gap: 14px; padding: 9px 0; border-top: 1px solid var(--a3); }
+.s14-d .r span { width: 230px; font-size: 20px; color: var(--ink2); flex: none; }
+.s14-d .r b { width: 140px; font-size: 32px; font-weight: 680; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; flex: none; }
+.s14-d .r em { font-style: normal; font-size: 18px; color: var(--mut); }
