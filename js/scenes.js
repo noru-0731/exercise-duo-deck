@@ -479,6 +479,46 @@
     },
   };
 
+
+  /* ── 16장: 짝 한 쌍이 1주에서 12주까지 줄을 따라 간다 ── */
+  S.s16 = {
+    build() {
+      this.svg = DECK.svg($('s16'));
+      const defs = DECK.el(this.svg, 'defs', {});
+      const f = DECK.el(defs, 'filter', { id: 'goo-s16', x: 0, y: 0, width: 1920, height: 1080, filterUnits: 'userSpaceOnUse' });
+      DECK.el(f, 'feGaussianBlur', { in: 'SourceGraphic', stdDeviation: 7, result: 'b' });
+      DECK.el(f, 'feColorMatrix', { in: 'b', mode: 'matrix', values: '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9' });
+      this.track = DECK.el(this.svg, 'line', { x1: 332, y1: 376, x2: 1588, y2: 376, stroke: C.g3, 'stroke-width': 4, 'stroke-linecap': 'round' });
+      this.prog = DECK.el(this.svg, 'line', { x1: 332, y1: 376, x2: 332, y2: 376, stroke: C.a, 'stroke-width': 4, 'stroke-linecap': 'round' });
+      this.marks = [332, 960, 1588].map((x) => DECK.el(this.svg, 'circle', { cx: x, cy: 376, r: 9, fill: '#fff', stroke: C.a, 'stroke-width': 3 }));
+      const g = DECK.el(this.svg, 'g', { filter: 'url(#goo-s16)' });
+      this.p = [DECK.el(g, 'circle', { cx: 0, cy: 0, r: 15 }), DECK.el(g, 'circle', { cx: 0, cy: 0, r: 15 })];
+      this.t = [];
+    },
+    at(x, instant, ms) { DECK.pos(this.p[0], x - 13, 376, 0); DECK.pos(this.p[1], x + 13, 376, 0); if (instant) { this.p.forEach((c) => (c.style.transition = 'none')); } },
+    reset() {
+      this.t.forEach(clearTimeout); this.t = [];
+      [this.track, this.prog, ...this.marks].forEach((e) => { e.style.opacity = 0; });
+      this.prog.setAttribute('x2', 332);
+      this.p.forEach((c) => { c.style.transition = ''; DECK.fill(c, C.a, 0); });
+      this.at(332);
+    },
+    step(sec, k, instant) {
+      if (k !== 1) return;
+      [this.track, ...this.marks].forEach((e) => { e.style.transitionDelay = '0ms'; e.style.opacity = 1; });
+      this.prog.style.opacity = 1;
+      this.p.forEach((c) => { c.style.transitionDelay = '0ms'; c.style.opacity = 1; });
+      if (instant) { this.prog.setAttribute('x2', 1588); this.p.forEach((c) => (c.style.transition = '')); this.at(1588); return; }
+      // 줄을 따라 천천히 12주 끝까지
+      this.p.forEach((c) => { c.style.transition = 'transform 3.2s cubic-bezier(.45,0,.25,1), opacity .6s'; });
+      const t0 = performance.now(), dur = 3200;
+      const tick = (now) => { const q = Math.min(1, (now - t0 - 500) / dur); if (q > 0) this.prog.setAttribute('x2', 332 + (1588 - 332) * (q < 0.5 ? 2 * q * q : 1 - Math.pow(-2 * q + 2, 2) / 2)); if (q < 1) requestAnimationFrame(tick); };
+      requestAnimationFrame(tick);
+      this.t.push(setTimeout(() => this.at(1588), 500));
+      this.t.push(setTimeout(() => { this.prog.setAttribute('x2', 1588); }, 4000));
+    },
+  };
+
   /* ── 15장: 시연 영상 틀 ── */
   S.s15 = {
     build() {
