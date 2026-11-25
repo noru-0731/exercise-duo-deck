@@ -3,7 +3,7 @@
   const RATE = 5;          // 1초에 읽는 글자 수 (1분에 300자)
   const LEAD_IN = 400;     // 장을 넘기고 첫 차례까지
   const params = new URLSearchParams(location.search);
-  const FINAL = params.has('final');
+  const FINAL = !params.has('narr');   // 기본은 장을 넘기면 한 번에 모두. ?narr 는 나레이션 속도로 차례 등장
   const SPEED = parseFloat(params.get('speed') || '1');
 
   window.DECK = { scenes: {}, FINAL };
@@ -137,7 +137,7 @@
     });
     // 지금 장을 처음부터 다시: R 키
     Reveal.addKeyBinding({ keyCode: 82, key: 'R', description: '지금 장을 처음부터 다시' }, () => {
-      clearTimers(); const s = Reveal.getCurrentSlide(); play(s);
+      clearTimers(); const s = Reveal.getCurrentSlide(); if (FINAL) { showFinal(s); return; } play(s);
       const sc = DECK.scenes[s.id]; if (sc && sc.enter) sc.enter(s, true);
     });
   });
