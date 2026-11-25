@@ -1,0 +1,149 @@
+@font-face {
+  font-family: 'Pretendard Variable';
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: block;
+  src: url('../vendor/pretendard/PretendardVariable.woff2') format('woff2-variations');
+}
+
+:root {
+  --a: #EE6B78;      /* 강조 */
+  --a1: #F39AA3;     /* 옅은 단계 1 */
+  --a2: #F8C4C9;     /* 옅은 단계 2 */
+  --a3: #FCE3E5;     /* 옅은 단계 3 */
+  --a4: #FEF3F4;     /* 옅은 단계 4 */
+  --at: #C8414F;     /* 글자로 쓰는 강조 */
+  --ink: #2B2F36;
+  --ink2: #4A505A;
+  --mut: #6B7280;
+  --g1: #9AA1AB;
+  --g2: #C9CED5;
+  --g3: #E3E6EA;
+  --g4: #F1F3F5;
+  --bg: #FBFBFC;
+  --card: #FFFFFF;
+  --line: #E6E8EC;
+  --ease: cubic-bezier(.22, .8, .24, 1);
+}
+
+html, body { background: var(--bg); }
+.reveal { word-break: keep-all; font-family: 'Pretendard Variable', Pretendard, -apple-system, sans-serif; color: var(--ink); }
+.reveal .slides { text-align: left; }
+.reveal .slides > section {
+  width: 1920px; height: 1080px; padding: 0; top: 0 !important; left: 0;
+  background: var(--bg); overflow: hidden;
+}
+.reveal .slides section * { box-sizing: border-box; }
+.reveal p, .reveal h1, .reveal h2, .reveal h3 { margin: 0; line-height: 1.35; letter-spacing: -0.02em; }
+.reveal .ab { position: absolute; }
+
+/* 머리 */
+.hd { position: absolute; left: 72px; right: 72px; top: 44px; height: 52px; display: flex; align-items: center; border-bottom: 1.5px solid var(--line); }
+.hd .grp { font-size: 24px; font-weight: 650; color: var(--at); padding-left: 16px; border-left: 4px solid var(--a); line-height: 1; }
+.hd .sub { font-size: 20px; color: var(--mut); margin-left: 18px; }
+.hd .no { margin-left: auto; font-size: 22px; color: var(--g1); font-variant-numeric: tabular-nums; }
+.hd .no b { color: var(--ink); font-weight: 600; }
+
+/* 헤드 */
+.lead { position: absolute; left: 72px; top: 116px; font-size: 26px; color: var(--mut); }
+.head { text-wrap: balance; position: absolute; left: 72px; right: 72px; top: 156px; font-size: 52px; font-weight: 650; color: var(--ink); letter-spacing: -0.035em; }
+
+/* 아래 띠 */
+.band { position: absolute; left: 0; right: 0; top: 968px; height: 112px; background: var(--a3); display: flex; align-items: center; padding: 0 72px; }
+.band::before { content: ''; width: 8px; height: 44px; background: var(--a); margin-right: 26px; flex: none; }
+.band p { font-size: 32px; font-weight: 560; color: var(--ink); }
+
+/* 카드 */
+.card { position: absolute; background: var(--card); border: 1.5px solid var(--line); border-radius: 18px; padding: 26px 30px; }
+.card.tint { background: var(--a4); border-color: var(--a3); }
+.card.gray { background: var(--g4); border-color: var(--g4); }
+.card .k { font-size: 22px; color: var(--mut); line-height: 1.35; }
+.card .v { font-size: 56px; font-weight: 650; letter-spacing: -0.03em; line-height: 1.1; margin-top: 8px; font-variant-numeric: tabular-nums; }
+.card .v small { font-size: 28px; font-weight: 550; margin-left: 6px; color: var(--ink2); }
+.card .v.a { color: var(--at); }
+.card .t { font-size: 22px; color: var(--ink2); line-height: 1.45; margin-top: 8px; }
+.src { position: absolute; font-size: 17px; color: var(--g1); }
+
+.lbl { font-size: 24px; color: var(--ink2); }
+.big { font-weight: 680; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; line-height: 1; }
+.at { color: var(--at); }
+.mut { color: var(--mut); }
+
+/* 막대 */
+.bar { position: absolute; border-radius: 10px; transform-origin: left center; }
+.bar.g { background: var(--g2); }
+.bar.gl { background: var(--g3); }
+.bar.a { background: var(--a); }
+.bar.a1 { background: var(--a1); }
+.bar.a2 { background: var(--a2); }
+
+/* 인용 */
+.quote { font-size: 44px; font-weight: 560; line-height: 1.4; letter-spacing: -0.03em; color: var(--ink); }
+.quote { text-wrap: balance; }
+.quote::before { content: ''; display: block; width: 56px; height: 6px; border-radius: 3px; background: var(--a1); margin-bottom: 26px; }
+.cite { font-size: 20px; color: var(--mut); margin-top: 18px; }
+
+/* 칸 흐름 (추린 순서) */
+.chips { position: absolute; display: flex; align-items: stretch; gap: 0; }
+.chip { flex: 1; background: var(--g4); border-radius: 14px; padding: 18px 14px; display: flex; flex-direction: column; justify-content: center; margin-right: 34px; position: relative; text-align: center; }
+.chip:last-child { margin-right: 0; }
+.chip:not(:last-child)::after { content: ''; position: absolute; right: -24px; top: 50%; width: 14px; height: 14px; border-top: 3px solid var(--g1); border-right: 3px solid var(--g1); transform: translateY(-50%) rotate(45deg); }
+.chip .n { font-size: 38px; font-weight: 650; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.chip .d { font-size: 19px; color: var(--mut); margin-top: 6px; line-height: 1.35; }
+.chip.on-a { background: var(--a3); }
+.chip.on-a .n { color: var(--at); }
+
+/* 표 */
+.tbl { position: absolute; border-collapse: collapse; font-size: 22px; }
+.tbl th { font-weight: 550; color: var(--mut); font-size: 19px; text-align: right; padding: 10px 14px; border-bottom: 1.5px solid var(--g2); }
+.tbl th:first-child, .tbl td:first-child { text-align: left; }
+.tbl td { padding: 11px 14px; border-bottom: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; color: var(--ink2); }
+.tbl tr.hl td { color: var(--ink); font-weight: 600; }
+
+/* 차례 등장: data-s 가 붙은 요소는 그 차례에 나온다 */
+[data-s] { opacity: 0; transform: translateY(14px); transition: opacity .7s var(--ease), transform .9s var(--ease); }
+[data-s].on { opacity: 1; transform: none; }
+[data-s].fx { transform: none; }               /* 자리 이동 없이 나타나기 */
+.bar[data-s] { opacity: 1; transform: scaleX(0); transition: transform 1.3s var(--ease); }
+.bar[data-s].on { transform: scaleX(1); }
+.barv[data-s] { opacity: 1; transform: scaleY(0); transform-origin: center bottom; transition: transform 1.3s var(--ease); }
+.barv[data-s].on { transform: scaleY(1); }
+[data-out].off { opacity: 0 !important; transition: opacity .8s var(--ease); }
+[data-dim].dim { opacity: .28 !important; transition: opacity .8s var(--ease); }
+
+/* 점 */
+svg.dots { position: absolute; overflow: visible; }
+svg.dots circle { transition: transform 1.4s var(--ease), fill .8s var(--ease), opacity .8s var(--ease), r .8s var(--ease); }
+svg line, svg path { transition: stroke .8s var(--ease), stroke-width .8s var(--ease), opacity .8s var(--ease); }
+
+.final [data-s], .final .bar[data-s], .final svg.dots circle, .final svg line, .final svg path { transition: none !important; }
+
+/* 영상 틀 */
+.vframe { position: absolute; background: #F3F4F6; border: 1.5px solid var(--line); border-radius: 18px; overflow: hidden; }
+.vframe video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; }
+.vframe .ph { position: absolute; inset: 0; }
+
+/* 14장 걸러지는 숫자 */
+.s14-row { display: flex; align-items: baseline; gap: 22px; padding: 6px 0 8px; border-bottom: 1.5px solid var(--line); }
+.s14-row .big { font-size: 56px; width: 120px; flex: none; color: var(--ink); }
+.s14-row .big.at { color: var(--at); }
+.s14-row span:last-child { font-size: 23px; color: var(--ink2); }
+
+/* 15장 차례 칸 */
+.s15-c { height: 160px; margin-bottom: 18px; border-radius: 18px; background: var(--card); border: 1.5px solid var(--line); padding: 24px 26px; display: flex; gap: 18px; transition: background .6s var(--ease), border-color .6s var(--ease), opacity .6s var(--ease); }
+.s15-c:last-child { margin-bottom: 0; }
+.s15-c .no { flex: none; width: 44px; height: 44px; border-radius: 50%; background: var(--g3); color: var(--ink2); font-size: 22px; font-weight: 650; display: flex; align-items: center; justify-content: center; transition: background .6s, color .6s; }
+.s15-c p { font-size: 25px; line-height: 1.45; color: var(--ink); }
+.s15-c.cur { background: var(--a4); border-color: var(--a); }
+.s15-c.cur .no { background: var(--a); color: #fff; }
+.s15-c.done { opacity: .5; }
+
+/* 부록 1 목록 */
+.a1-list { margin-top: 18px; }
+.a1-list > div { display: flex; gap: 24px; padding: 30px 0; border-bottom: 1.5px solid var(--g3); }
+.a1-list.a > div { border-bottom-color: var(--a3); }
+.a1-list > div:last-child { border-bottom: 0; }
+.a1-list .lb { flex: none; width: 170px; font-size: 27px; font-weight: 600; color: var(--ink); }
+.a1-list .tx { font-size: 26px; line-height: 1.45; color: var(--ink2); }
+.tbl.a3 td, .tbl.a3 th { font-size: 22px; text-align: left; padding: 12px 18px; }
+.tbl.a3 th { font-size: 19px; }
