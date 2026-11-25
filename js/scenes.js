@@ -44,7 +44,7 @@
     },
   };
 
-  /* ── 3장: 2장의 선홍 점이 관계 줄로 모인다 ── */
+  /* ── 3장: 2장의 선홍 점이 부탁할 사람이 없는 쪽 막대로 쌓인다 ── */
   S.s3 = {
     build() {
       this.svg = DECK.svg($('s3'));
@@ -59,7 +59,7 @@
     start() {
       const rnd = DECK.rng(3);
       this.d.forEach((c, j) => {
-        DECK.pos(c, 340 + (j / (S2.acc - 1)) * 940, 316 + rnd() * 28, Math.floor(rnd() * 500));
+        DECK.pos(c, 176 + (j % 9) * 33, 842 - Math.floor(j / 9) * 33, Math.floor(rnd() * 500));
       });
     },
     step(sec, k) { if (k === 2) this.d.forEach((c) => { c.style.transitionDelay = '0ms'; c.style.opacity = 0; }); },
