@@ -114,10 +114,10 @@
     let n = 0;
     const total = main.filter((s) => !s.classList.contains('apx')).length;
     main.forEach((s) => {
-      const no = s.querySelector('.hd .no');
-      if (!no) return;
       if (s.classList.contains('apx')) return;
       n += 1;
+      const no = s.querySelector('.hd .no');
+      if (!no) return;
       no.innerHTML = `<span style="color:var(--ink);font-weight:600">${String(n).padStart(2, "0")}</span> / ${total}`;
     });
   }

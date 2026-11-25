@@ -168,3 +168,5 @@ svg line, svg path { transition: stroke .8s var(--ease), stroke-width .8s var(--
 .s14-holo .key i.k-c { border-radius: 50%; }
 .a1-list .lb { width: 150px; }
 .card .v { white-space: nowrap; }
+
+.cover-art { position: absolute; }

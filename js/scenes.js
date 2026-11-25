@@ -7,6 +7,44 @@
   /* 시연 영상 경로: 이 한 줄만 바꾸면 15장에 영상이 들어간다 */
   const DEMO_VIDEO = 'media/demo.mp4';
 
+
+  /* ── 표지와 Q&A: 흩어진 사람 가운데 짝이 맺어진다 ── */
+  function coverArt(id, seed) {
+    return {
+      build() {
+        const sec = $(id);
+        this.svg = DECK.svg(sec);
+        const rnd = DECK.rng(seed);
+        const cols = 9, rows = 11, x0 = 1150, y0 = 110, gx = 80, gy = 82;
+        this.pts = [];
+        for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+          this.pts.push([x0 + c * gx + (r % 2) * 40 + (rnd() - 0.5) * 22, y0 + r * gy + (rnd() - 0.5) * 22]);
+        }
+        this.lines = []; this.paired = new Set();
+        const P = (r, c) => r * cols + c;
+        const pairs = [[P(0, 2), P(0, 3)], [P(1, 6), P(2, 6)], [P(2, 1), P(2, 2)], [P(3, 4), P(4, 4)], [P(4, 7), P(4, 8)], [P(5, 1), P(6, 1)],
+          [P(6, 5), P(6, 6)], [P(7, 3), P(8, 3)], [P(8, 6), P(8, 7)], [P(9, 0), P(9, 1)], [P(10, 4), P(10, 5)], [P(1, 0), P(1, 1)]];
+        pairs.forEach(([a, b]) => {
+          const [x1, y1] = this.pts[a], [x2, y2] = this.pts[b];
+          const l = DECK.el(this.svg, 'line', { x1, y1, x2, y2, stroke: C.a, 'stroke-width': 8, 'stroke-linecap': 'round' });
+          this.lines.push(l); this.paired.add(a); this.paired.add(b);
+        });
+        this.d = DECK.dots(this.svg, this.pts.length, 17);
+        this.d.forEach((c, i) => DECK.pos(c, this.pts[i][0], this.pts[i][1]));
+      },
+      reset() {
+        this.d.forEach((c) => { DECK.fill(c, C.g3, 0); });
+        this.lines.forEach((l) => { l.style.opacity = 0; });
+      },
+      step(sec, k, instant) {
+        if (k === 1) this.d.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : i * 6) + 'ms'; DECK.fill(c, this.paired.has(i) ? C.a : C.g3, 1); });
+        if (k === 1) this.lines.forEach((l, i) => { l.style.transitionDelay = (instant ? 0 : 700 + i * 90) + 'ms'; l.style.opacity = 1; });
+      },
+    };
+  }
+  S.s0 = coverArt('s0', 21);
+  S.sqa = coverArt('sqa', 33);
+
   /* ── 2장: 1장 막대가 부서져 점 500개가 된다 ── */
   const S2 = { n: 500, cols: 50, rows: 10, acc: 113 };
   S2.xy = (i) => {
