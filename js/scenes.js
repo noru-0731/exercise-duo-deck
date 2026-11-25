@@ -296,52 +296,71 @@
   };
 
   /* ── 14장: 동 427개를 세 기준으로 거른다 ── */
-  const S14 = { n: 427, cols: 29 };
-  (function () {
-    const rnd = DECK.rng(2026);
-    const idx = [...Array(S14.n).keys()];
-    for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
-    // 등촌제3동 점은 맨 윗줄에 두어 이름표가 다른 점을 가리지 않게 한다
-    const k = idx.indexOf(16); [idx[0], idx[k]] = [idx[k], idx[0]];
-    S14.s43 = new Set(idx.slice(0, 43));
-    S14.s22 = new Set(idx.slice(0, 22));
-    S14.s12 = new Set(idx.slice(0, 12));
-    S14.top = idx[0];
-    S14.xy = (i) => [96 + (i % S14.cols) * 38, 304 + Math.floor(i / S14.cols) * 37];
-  })();
+  /* 14장: 서울 427개 동 기둥. 높이는 혼자 사는 수급 노인 수 */
   S.s14 = {
     build() {
+      const D = window.S14DATA, NS = DECK;
+      const P = (x, y) => [960 + (x - 4) * 2.9, 556 + (y + 135.74) * 1.0];
       this.svg = DECK.svg($('s14'));
-      this.d = DECK.dots(this.svg, S14.n, 12);
-      this.d.forEach((c, i) => { const [x, y] = S14.xy(i); DECK.pos(c, x, y); });
-      const [tx, ty] = S14.xy(S14.top);
-      this.lbl = DECK.el(this.svg, 'g', {});
-      DECK.el(this.lbl, 'rect', { x: tx - 75, y: ty - 70, width: 150, height: 42, rx: 10, fill: '#fff', stroke: C.a, 'stroke-width': 2 });
-      const t = DECK.el(this.lbl, 'text', { x: tx, y: ty - 41, 'text-anchor': 'middle', 'font-size': 22, 'font-weight': 600, fill: '#C8414F' });
-      t.textContent = '등촌제3동';
+      // 바닥: 동 중심점들을 감싸는 껍질
+      const pts = D.d.map((r) => P(r[0], r[1]));
+      const hull = (() => {
+        const p = pts.map((q) => q.slice()).sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+        const cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+        const lo = [], up = [];
+        p.forEach((q) => { while (lo.length >= 2 && cr(lo[lo.length - 2], lo[lo.length - 1], q) <= 0) lo.pop(); lo.push(q); });
+        p.slice().reverse().forEach((q) => { while (up.length >= 2 && cr(up[up.length - 2], up[up.length - 1], q) <= 0) up.pop(); up.push(q); });
+        return lo.slice(0, -1).concat(up.slice(0, -1));
+      })();
+      const cx = pts.reduce((a, q) => a + q[0], 0) / pts.length, cy = pts.reduce((a, q) => a + q[1], 0) / pts.length;
+      const poly = hull.map(([x, y]) => [cx + (x - cx) * 1.06, cy + (y - cy) * 1.1].map((v) => v.toFixed(1)).join(',')).join(' ');
+      this.ground = NS.el(this.svg, 'polygon', { points: poly, fill: '#EEF0F3', stroke: C.g2, 'stroke-width': 1.5, 'stroke-linejoin': 'round' });
+      // 체력인증센터
+      this.cen = D.c.map((r) => { const [x, y] = P(r[0], r[1]); return NS.el(this.svg, 'circle', { cx: x, cy: y, r: 7, fill: '#fff', stroke: '#4A505A', 'stroke-width': 3 }); });
+      // 기둥: 뒤에서 앞으로
+      const order = D.d.map((r, i) => i).sort((i, j) => pts[i][1] - pts[j][1]);
+      this.pl = [];
+      order.forEach((i) => {
+        const r = D.d[i], [x, y] = pts[i];
+        const h = Math.max(3, r[2] / 2452 * 250), w = r[4] ? 14 : 8;
+        const e = NS.el(this.svg, 'rect', { x: x - w / 2, y: y - h, width: w, height: h, rx: 2, class: 'pl' });
+        e._st = r[3]; e._top = r[4]; e._x = x; e._y = y; e._h = h;
+        this.pl.push(e);
+      });
+      const t = this.pl.find((e) => e._top);
+      this.lbl = NS.el(this.svg, 'g', {});
+      NS.el(this.lbl, 'rect', { x: t._x - 80, y: t._y - t._h - 60, width: 160, height: 44, rx: 10, fill: '#fff', stroke: C.a, 'stroke-width': 2 });
+      const tx = NS.el(this.lbl, 'text', { x: t._x, y: t._y - t._h - 30, 'text-anchor': 'middle', 'font-size': 23, 'font-weight': 650, fill: '#C8414F' });
+      tx.textContent = '등촌제3동';
       this.lbl.style.transition = 'opacity .8s';
     },
     reset() {
-      this.d.forEach((c) => { DECK.fill(c, C.g2, 0); c.setAttribute('r', 12); });
+      this.ground.style.opacity = 0;
+      this.cen.forEach((c) => { c.style.opacity = 0; c.style.transition = 'opacity .6s'; });
+      this.pl.forEach((e) => { e.style.transform = 'scaleY(0)'; e.style.fill = C.g2; e.style.opacity = 1; e.style.transitionDelay = '0ms'; });
       this.lbl.style.opacity = 0;
     },
     step(sec, k, instant) {
       const D = (ms) => (instant ? 0 : ms) + 'ms';
-      if (k === 1) this.d.forEach((c, i) => { c.style.transitionDelay = D((i % S14.cols) * 40); c.style.opacity = 1; });
-      if (k === 2) this.d.forEach((c, i) => {
-        c.style.transitionDelay = D(0);
-        if (S14.s43.has(i)) DECK.fill(c, C.a2); else DECK.fill(c, C.g3, 0.55);
+      if (k === 1) {
+        this.ground.style.transition = 'opacity .6s'; this.ground.style.opacity = 1;
+        this.pl.forEach((e) => { e.style.transitionDelay = D((e._x - 500) * 0.9); e.style.transform = 'scaleY(1)'; });
+      }
+      if (k === 2) this.pl.forEach((e) => {
+        e.style.transitionDelay = D(0);
+        if (e._st >= 1) e.style.fill = C.a2; else { e.style.fill = C.g3; e.style.opacity = 0.6; }
       });
-      if (k === 3) this.d.forEach((c, i) => {
-        if (!S14.s43.has(i)) return;
-        if (!S14.s22.has(i)) { c.style.transitionDelay = D(0); DECK.fill(c, C.g2, 0.7); }
-        else if (!S14.s12.has(i)) { c.style.transitionDelay = D(900); DECK.fill(c, C.g2, 0.9); }
-        else { c.style.transitionDelay = D(900); DECK.fill(c, C.a1); }
-      });
+      if (k === 3) {
+        this.pl.forEach((e) => {
+          if (e._st === 1) { e.style.transitionDelay = D(0); e.style.fill = C.g2; }
+          if (e._st === 2) { e.style.transitionDelay = D(600); e.style.fill = C.g2; }
+          if (e._st === 3) { e.style.transitionDelay = D(600); e.style.fill = C.a1; }
+        });
+        this.cen.forEach((c, i) => { c.style.transitionDelay = D(300 + i * 30); c.style.opacity = 1; });
+      }
       if (k === 4) {
-        const c = this.d[S14.top];
-        c.style.transitionDelay = D(0); DECK.fill(c, C.a); c.setAttribute('r', 17);
-        this.lbl.style.transitionDelay = D(500); this.lbl.style.opacity = 1;
+        this.pl.forEach((e) => { if (e._st === 3) { e.style.transitionDelay = D(0); e.style.fill = e._top ? C.a : C.a1; } });
+        this.lbl.style.transitionDelay = D(400); this.lbl.style.opacity = 1;
       }
     },
   };
