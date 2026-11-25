@@ -158,6 +158,21 @@
   };
 
   /* ── 9장: 12주 띠와 세 시기 ── */
+
+  /* ── 8장: 다시 측정한 사람 100명 가운데 2분 걷기가 늘어난 63% ── */
+  S.s8 = {
+    build() {
+      this.svg = DECK.svg($('s8'));
+      this.d = DECK.dots(this.svg, 100, 14);
+    },
+    reset() {
+      this.d.forEach((c, i) => { DECK.pos(c, 1014 + (i % 10) * 40, 422 + Math.floor(i / 10) * 34); DECK.fill(c, i < 63 ? C.a : C.g2, 0); });
+    },
+    step(sec, k, instant) {
+      if (k === 2) this.d.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : 200 + i * 12) + 'ms'; c.style.opacity = 1; });
+    },
+  };
+
   S.s9 = {
     build() {
       const box = $('s9-weeks');
