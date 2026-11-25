@@ -9,54 +9,67 @@
 
 
   /* ── 표지와 Q&A: 흩어진 사람 가운데 짝이 맺어진다 ── */
-  function coverArt(id, seed) {
+  function coverArt(id) {
     return {
       build() {
         const sec = $(id);
         this.svg = DECK.svg(sec);
-        const rnd = DECK.rng(seed);
-        const cols = 9, rows = 11, x0 = 1150, y0 = 110, gx = 80, gy = 82;
+        const NSv = 'http://www.w3.org/2000/svg';
+        // 물방울처럼 붙게 하는 필터: 흐리게 한 뒤 가장자리를 다시 또렷하게
+        const defs = DECK.el(this.svg, 'defs', {});
+        const f = DECK.el(defs, 'filter', { id: 'goo-' + id, x: 0, y: 0, width: 1920, height: 1080, filterUnits: 'userSpaceOnUse' });
+        DECK.el(f, 'feGaussianBlur', { in: 'SourceGraphic', stdDeviation: 9, result: 'b' });
+        DECK.el(f, 'feColorMatrix', { in: 'b', mode: 'matrix', values: '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9' });
+        const cols = 8, rows = 10, x0 = 1180, y0 = 120, gx = 86, gy = 86;
         this.pts = [];
-        for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
-          this.pts.push([x0 + c * gx + (r % 2) * 40 + (rnd() - 0.5) * 22, y0 + r * gy + (rnd() - 0.5) * 22]);
-        }
-        this.lines = []; this.paired = new Set();
+        for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) this.pts.push([x0 + c * gx + (r % 2) * 43, y0 + r * gy]);
         const P = (r, c) => r * cols + c;
-        const pairs = [[P(0, 2), P(0, 3)], [P(1, 6), P(2, 6)], [P(2, 1), P(2, 2)], [P(3, 4), P(4, 4)], [P(4, 7), P(4, 8)], [P(5, 1), P(6, 1)],
-          [P(6, 5), P(6, 6)], [P(7, 3), P(8, 3)], [P(8, 6), P(8, 7)], [P(9, 0), P(9, 1)], [P(10, 4), P(10, 5)], [P(1, 0), P(1, 1)]];
-        pairs.forEach(([a, b]) => {
-          const [x1, y1] = this.pts[a], [x2, y2] = this.pts[b];
-          const l = DECK.el(this.svg, 'line', { x1, y1, x2, y2, stroke: C.a, 'stroke-width': 8, 'stroke-linecap': 'round' });
-          this.lines.push(l); this.paired.add(a); this.paired.add(b);
-        });
-        this.d = DECK.dots(this.svg, this.pts.length, 17);
-        this.d.forEach((c, i) => DECK.pos(c, this.pts[i][0], this.pts[i][1]));
+        this.pairs = [[P(0, 2), P(0, 3)], [P(0, 6), P(1, 6)], [P(1, 4), P(2, 4)], [P(2, 0), P(2, 1)], [P(3, 3), P(3, 4)], [P(4, 6), P(5, 6)],
+          [P(5, 1), P(5, 2)], [P(6, 4), P(6, 5)], [P(7, 0), P(8, 0)], [P(7, 6), P(7, 7)], [P(8, 3), P(8, 4)], [P(9, 1), P(9, 2)]];
+        this.mate = new Map();
+        this.pairs.forEach(([a, b]) => { this.mate.set(a, b); this.mate.set(b, a); });
+        const gGray = DECK.el(this.svg, 'g', {});
+        const gPair = DECK.el(this.svg, 'g', { filter: 'url(#goo-' + id + ')' });
+        this.d = this.pts.map((p, i) => DECK.el(this.mate.has(i) ? gPair : gGray, 'circle', { cx: 0, cy: 0, r: this.mate.has(i) ? 21 : 17 }));
+        this.t = [];
       },
+      home() { this.d.forEach((c, i) => DECK.pos(c, this.pts[i][0], this.pts[i][1])); },
       reset() {
-        this.d.forEach((c) => { DECK.fill(c, C.g3, 0); });
-        this.lines.forEach((l) => { l.style.opacity = 0; });
+        this.t.forEach(clearTimeout); this.t = [];
+        this.home();
+        this.d.forEach((c, i) => DECK.fill(c, this.mate.has(i) ? C.a : C.g3, 0));
+      },
+      // 짝인 두 점이 가운데로 다가가 맞붙는다
+      join(i) {
+        const j = this.mate.get(i), [x1, y1] = this.pts[i], [x2, y2] = this.pts[j];
+        const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, dx = x1 - mx, dy = y1 - my, L = Math.hypot(dx, dy) || 1;
+        DECK.pos(this.d[i], mx + dx / L * 24, my + dy / L * 24);
       },
       step(sec, k, instant) {
-        if (k === 1) this.d.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : i * 6) + 'ms'; DECK.fill(c, this.paired.has(i) ? C.a : C.g3, 1); });
-        if (k === 1) this.lines.forEach((l, i) => { l.style.transitionDelay = (instant ? 0 : 700 + i * 90) + 'ms'; l.style.opacity = 1; });
+        if (k !== 1) return;
+        this.d.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : i * 6) + 'ms'; c.style.opacity = 1; });
+        this.pairs.forEach(([a, b], n) => {
+          if (instant) { this.join(a); this.join(b); return; }
+          this.t.push(setTimeout(() => { this.join(a); this.join(b); }, 900 + n * 160));
+        });
       },
     };
   }
-  S.s0 = coverArt('s0', 21);
-  S.sqa = coverArt('sqa', 33);
+  S.s0 = coverArt('s0');
+  S.sqa = coverArt('sqa');
 
   /* ── 2장: 1장 막대가 부서져 점 500개가 된다 ── */
-  const S2 = { n: 500, cols: 50, rows: 10, acc: 113 };
+  const S2 = { n: 100, cols: 10, rows: 10, acc: 23 };   // 점 하나가 서울 노인 1%. 22.6%는 반올림해 23개
   S2.xy = (i) => {
-    const c = Math.floor(i / S2.rows), r = i % S2.rows;
-    return [92 + c * 35.5, 300 + r * 33];
+    const c = i % S2.cols, r = Math.floor(i / S2.cols);
+    return [112 + c * 62, 318 + r * 62];
   };
   S2.isA = (i) => i >= S2.n - S2.acc;
   S.s2 = {
     build() {
       const sec = $('s2');
       this.svg = DECK.svg(sec);
-      this.d = DECK.dots(this.svg, S2.n, 11);
+      this.d = DECK.dots(this.svg, S2.n, 22);
     },
     reset() {
       const rnd = DECK.rng(7);
@@ -69,7 +82,7 @@
       const rnd = DECK.rng(11);
       this.d.forEach((c, i) => {
         const [x, y] = S2.xy(i);
-        DECK.pos(c, x, y, Math.floor(rnd() * 700));
+        DECK.pos(c, x, y, Math.floor(rnd() * 500));
         DECK.fill(c, C.g1);
       });
     },
@@ -86,7 +99,7 @@
   S.s3 = {
     build() {
       this.svg = DECK.svg($('s3'));
-      this.d = DECK.dots(this.svg, S2.acc, 11);
+      this.d = DECK.dots(this.svg, S2.acc, 22);
     },
     reset() {
       this.d.forEach((c, j) => {
@@ -97,7 +110,7 @@
     start() {
       const rnd = DECK.rng(3);
       this.d.forEach((c, j) => {
-        DECK.pos(c, 176 + (j % 9) * 33, 842 - Math.floor(j / 9) * 33, Math.floor(rnd() * 500));
+        DECK.pos(c, 198 + (j % 5) * 56, 828 - Math.floor(j / 5) * 56, Math.floor(rnd() * 500));
       });
     },
     step(sec, k) { if (k === 2) this.d.forEach((c) => { c.style.transitionDelay = '0ms'; c.style.opacity = 0; }); },
