@@ -282,20 +282,46 @@
   S.s12 = {
     build() {
       this.svg = DECK.svg($('s12'));
-      this.d = DECK.dots(this.svg, 40, 13);
+      const defs = DECK.el(this.svg, 'defs', {});
+      const f = DECK.el(defs, 'filter', { id: 'goo-s12', x: 0, y: 0, width: 1920, height: 1080, filterUnits: 'userSpaceOnUse' });
+      DECK.el(f, 'feGaussianBlur', { in: 'SourceGraphic', stdDeviation: 8, result: 'b' });
+      DECK.el(f, 'feColorMatrix', { in: 'b', mode: 'matrix', values: '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9' });
+      const g = DECK.el(this.svg, 'g', { filter: 'url(#goo-s12)' });
+      // 계산 칸 안의 짝 자리 8쌍과 혼자인 한 사람
+      this.pairs = [];
+      for (let r = 0; r < 2; r++) for (let c = 0; c < 4; c++) this.pairs.push([770 + c * 128, 400 + r * 82]);
+      this.lone = [960, 570];
+      this.d = []; for (let i = 0; i < 17; i++) this.d.push(DECK.el(g, 'circle', { cx: 0, cy: 0, r: 17 }));
+      this.t = [];
     },
+    at(k, gap) { const [x, y] = this.pairs[k]; return [[x - gap, y], [x + gap, y]]; },
     reset() {
-      this.d.forEach((c, i) => { DECK.pos(c, S11.big.pts[i][0], S11.big.pts[i][1]); DECK.fill(c, C.a, 1); });
+      this.t.forEach(clearTimeout); this.t = [];
+      this.d.forEach((c, i) => { const p = S11.big.pts[i] || S11.big.pts[0]; DECK.pos(c, p[0], p[1]); DECK.fill(c, C.a, 1); });
     },
     start() {
-      const rnd = DECK.rng(9);
+      // 11장의 점들이 계산 칸으로 들어와 흩어져 선다
       this.d.forEach((c, i) => {
-        DECK.pos(c, 900 + rnd() * 120, 500 + rnd() * 120, i * 15);
-        c.style.opacity = 0;
-        c.style.transitionDelay = (i * 15) + 'ms, ' + (i * 15) + 'ms, ' + (900 + i * 15) + 'ms';
+        const [x, y] = i < 16 ? this.at(Math.floor(i / 2), 32)[i % 2] : this.lone;
+        DECK.pos(c, x, y, i * 30); DECK.fill(c, C.g1, 1);
       });
     },
-    finish() { this.d.forEach((c) => { c.style.opacity = 0; }); },
+    step(sec, k, instant) {
+      const D = (ms) => (instant ? 0 : ms);
+      if (k === 2) this.pairs.forEach((_, n) => {
+        const go = () => { const [a, b] = this.at(n, 20); DECK.pos(this.d[2 * n], a[0], a[1]); DECK.pos(this.d[2 * n + 1], b[0], b[1]); DECK.fill(this.d[2 * n], C.a); DECK.fill(this.d[2 * n + 1], C.a); };
+        if (instant) go(); else this.t.push(setTimeout(go, 600 + n * 160));
+      });
+      if (k === 3) {
+        // 짝 하나가 끊기면 혼자 된 사람이 혼자였던 사람과 다시 맺어진다
+        const go = () => {
+          const out = this.d[7], left = this.d[6], lone = this.d[16];
+          DECK.fill(out, C.g2); DECK.pos(out, this.pairs[3][0] + 40, this.pairs[3][1] - 10);
+          DECK.pos(left, this.lone[0] - 20, this.lone[1]); DECK.pos(lone, this.lone[0] + 20, this.lone[1]); DECK.fill(lone, C.a);
+        };
+        if (instant) go(); else this.t.push(setTimeout(go, D(500)));
+      }
+    },
   };
 
   /* ── 13장: 흐린 점이 칸마다 진해진다 ── */
