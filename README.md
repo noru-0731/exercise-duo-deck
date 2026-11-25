@@ -7,6 +7,6 @@
 - S: 발표자 노트 창. E: 지금 장을 끝 모습으로. R: 지금 장을 처음부터 다시.
 - `?final`을 붙이면 모든 장이 움직임 없이 끝 모습으로 열린다.
 - `?narr`를 붙이면 장마다 내용이 나레이션 길이에 맞춰 차례로 나온다.
-- 15장 시연 영상: `media/demo.mp4`에 넣는다. 다른 이름이면 `js/scenes.js` 맨 위 `DEMO_VIDEO` 한 줄만 바꾼다.
+- 14장 시연 영상: `media/demo.mp4`에 넣는다. 다른 이름이면 `js/scenes.js` 맨 위 `DEMO_VIDEO` 한 줄만 바꾼다.
 
 글꼴 Pretendard(SIL OFL 1.1)와 reveal.js(MIT)는 `vendor/`에 원본 라이선스와 함께 넣었다.
