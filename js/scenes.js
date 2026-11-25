@@ -4,7 +4,7 @@
   const C = DECK.C;
   const $ = (id) => document.getElementById(id);
 
-  /* 시연 영상 경로: 이 한 줄만 바꾸면 15장에 영상이 들어간다 */
+  /* 시연 영상 경로: 이 한 줄만 바꾸면 16장(id s15)에 영상이 들어간다 */
   const DEMO_VIDEO = 'media/demo.mp4';
 
 
@@ -59,7 +59,7 @@
   S.sqa = coverArt('sqa');
 
   /* ── 2장: 1장 막대가 부서져 점 500개가 된다 ── */
-  const S2 = { n: 100, cols: 10, rows: 10, acc: 23 };   // 점 하나가 서울 노인 1%. 22.6%는 반올림해 23개
+  const S2 = { n: 100, cols: 10, rows: 10, acc: 23 };   // 선홍 23개는 22.6%를 반올림한 것
   S2.xy = (i) => {
     const c = i % S2.cols, r = Math.floor(i / S2.cols);
     return [112 + c * 62, 318 + r * 62];
@@ -110,7 +110,7 @@
     start() {
       const rnd = DECK.rng(3);
       this.d.forEach((c, j) => {
-        DECK.pos(c, 198 + (j % 5) * 56, 828 - Math.floor(j / 5) * 56, Math.floor(rnd() * 500));
+        DECK.pos(c, 130 + (j % 5) * 50, 812 - Math.floor(j / 5) * 50, Math.floor(rnd() * 500));
       });
     },
     step(sec, k) { if (k === 2) this.d.forEach((c) => { c.style.transitionDelay = '0ms'; c.style.opacity = 0; }); },
@@ -163,10 +163,10 @@
   S.s8 = {
     build() {
       this.svg = DECK.svg($('s8'));
-      this.d = DECK.dots(this.svg, 100, 14);
+      this.d = DECK.dots(this.svg, 100, 13);
     },
     reset() {
-      this.d.forEach((c, i) => { DECK.pos(c, 1014 + (i % 10) * 40, 422 + Math.floor(i / 10) * 34); DECK.fill(c, i < 63 ? C.a : C.g2, 0); });
+      this.d.forEach((c, i) => { DECK.pos(c, 1292 + (i % 10) * 33, 432 + Math.floor(i / 10) * 33); DECK.fill(c, i < 63 ? C.a : C.g2, 0); });
     },
     step(sec, k, instant) {
       if (k === 2) this.d.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : 200 + i * 12) + 'ms'; c.style.opacity = 1; });
@@ -200,7 +200,7 @@
   };
 
   /* ── 10장: 점 20개를 아무렇게나, 그다음 비슷한 사람끼리 잇는다 ── */
-  const S10 = { n: 20, y: 500, yA: 460, yB: 660 };
+  const S10 = { n: 20, y: 500, yA: 500, yB: 690 };
   (function () {
     const rnd = DECK.rng(42);
     const v = [];
@@ -258,8 +258,8 @@
       for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) out.push([cx0 + c * gx, cy0 + r * gy]);
       return out;
     };
-    S11.small = { centers: pairs(162, 600, 5, 1, 130, 0), good: new Set([2]) };
-    S11.big = { centers: pairs(960, 452, 5, 4, 190, 92), good: new Set([0, 2, 3, 5, 7, 8, 10, 12, 14, 16, 19]) };
+    S11.small = { centers: pairs(162, 664, 5, 1, 130, 0), good: new Set([2]) };
+    S11.big = { centers: pairs(960, 572, 5, 4, 190, 88), good: new Set([0, 2, 3, 5, 7, 8, 10, 12, 14, 16, 19]) };
     S11.big.pts = [];
     S11.big.centers.forEach(([x, y]) => { S11.big.pts.push([x - 30, y]); S11.big.pts.push([x + 30, y]); });
   })();
@@ -304,8 +304,8 @@
       const g = DECK.el(this.svg, 'g', { filter: 'url(#goo-s12)' });
       // 계산 칸 안의 짝 자리 8쌍과 혼자인 한 사람
       this.pairs = [];
-      for (let r = 0; r < 2; r++) for (let c = 0; c < 4; c++) this.pairs.push([770 + c * 128, 400 + r * 82]);
-      this.lone = [960, 570];
+      for (let r = 0; r < 2; r++) for (let c = 0; c < 4; c++) this.pairs.push([770 + c * 128, 440 + r * 82]);
+      this.lone = [960, 620];
       this.d = []; for (let i = 0; i < 17; i++) this.d.push(DECK.el(g, 'circle', { cx: 0, cy: 0, r: 17 }));
       this.t = [];
     },
