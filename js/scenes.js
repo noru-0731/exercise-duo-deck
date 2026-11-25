@@ -228,41 +228,46 @@
   };
 
   /* ── 11장: 점이 열, 스물, 마흔의 세 무리가 된다 ── */
-  const S11 = { groups: [] };
+  /* 11장: 후보가 적을 때(10명)와 동 전체로 모을 때(40명). 맞는 짝은 물방울처럼 붙는다 */
+  const S11 = {};
   (function () {
-    const spec = [
-      { n: 10, x: 72, top: 650, rows: 1, col: C.g1 },
-      { n: 20, x: 522, top: 524, rows: 2, col: C.a1 },
-      { n: 40, x: 972, top: 330, rows: 4, col: C.a },
-    ];
-    spec.forEach((g) => {
-      const pts = [];
-      for (let i = 0; i < g.n; i++) {
-        const r = Math.floor(i / 10), c = i % 10;
-        pts.push([g.x + 30 + c * 40, g.top + r * 40]);
-      }
-      S11.groups.push({ ...g, pts });
-    });
+    const pairs = (cx0, cy0, cols, rows, gx, gy) => {
+      const out = [];
+      for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) out.push([cx0 + c * gx, cy0 + r * gy]);
+      return out;
+    };
+    S11.small = { centers: pairs(162, 600, 5, 1, 130, 0), good: new Set([2]) };
+    S11.big = { centers: pairs(960, 452, 5, 4, 190, 92), good: new Set([0, 2, 3, 5, 7, 8, 10, 12, 14, 16, 19]) };
+    S11.big.pts = [];
+    S11.big.centers.forEach(([x, y]) => { S11.big.pts.push([x - 30, y]); S11.big.pts.push([x + 30, y]); });
   })();
   S.s11 = {
     build() {
       this.svg = DECK.svg($('s11'));
-      this.g = S11.groups.map((g) => DECK.dots(this.svg, g.n, 13));
+      const defs = DECK.el(this.svg, 'defs', {});
+      const f = DECK.el(defs, 'filter', { id: 'goo-s11', x: 0, y: 0, width: 1920, height: 1080, filterUnits: 'userSpaceOnUse' });
+      DECK.el(f, 'feGaussianBlur', { in: 'SourceGraphic', stdDeviation: 9, result: 'b' });
+      DECK.el(f, 'feColorMatrix', { in: 'b', mode: 'matrix', values: '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9' });
+      const gGray = DECK.el(this.svg, 'g', {}), gGood = DECK.el(this.svg, 'g', { filter: 'url(#goo-s11)' });
+      this.sets = [S11.small, S11.big].map((S, si) => S.centers.map(([x, y], k) => {
+        const good = S.good.has(k), g = good ? gGood : gGray;
+        return { x, y, good, si, a: DECK.el(g, 'circle', { cx: 0, cy: 0, r: good ? 23 : 20 }), b: DECK.el(g, 'circle', { cx: 0, cy: 0, r: good ? 23 : 20 }) };
+      }));
+      this.t = [];
     },
+    place(p, gap) { DECK.pos(p.a, p.x - gap, p.y); DECK.pos(p.b, p.x + gap, p.y); },
     reset() {
-      S11.groups.forEach((g, gi) => this.g[gi].forEach((c, i) => {
-        if (gi === 1) { DECK.pos(c, S10.x[i], S10.y); DECK.fill(c, C.ink, 1); }
-        else { DECK.pos(c, g.pts[i][0], g.pts[i][1]); DECK.fill(c, g.col, 0); }
-      }));
+      this.t.forEach(clearTimeout); this.t = [];
+      this.sets.flat().forEach((p) => { this.place(p, p.good ? 32 : 25); [p.a, p.b].forEach((c) => DECK.fill(c, p.good ? C.a : C.g2, 0)); });
     },
-    start() {
-      S11.groups.forEach((g, gi) => this.g[gi].forEach((c, i) => {
-        DECK.pos(c, g.pts[i][0], g.pts[i][1], i * 25 + gi * 150);
-        DECK.fill(c, g.col, 1);
-      }));
-    },
-    finish() {
-      S11.groups.forEach((g, gi) => this.g[gi].forEach((c, i) => { DECK.pos(c, g.pts[i][0], g.pts[i][1]); DECK.fill(c, g.col, 1); }));
+    step(sec, k, instant) {
+      const si = k - 1; if (si > 1) return;
+      this.sets[si].forEach((p, n) => {
+        [p.a, p.b].forEach((c) => { c.style.transitionDelay = (instant ? 0 : n * 30) + 'ms'; c.style.opacity = 1; });
+        if (!p.good) return;
+        if (instant) { this.place(p, 22); return; }
+        this.t.push(setTimeout(() => this.place(p, 22), 800 + n * 60));
+      });
     },
   };
 
@@ -273,8 +278,7 @@
       this.d = DECK.dots(this.svg, 40, 13);
     },
     reset() {
-      const g = S11.groups[2];
-      this.d.forEach((c, i) => { DECK.pos(c, g.pts[i][0], g.pts[i][1]); DECK.fill(c, C.a, 1); });
+      this.d.forEach((c, i) => { DECK.pos(c, S11.big.pts[i][0], S11.big.pts[i][1]); DECK.fill(c, C.a, 1); });
     },
     start() {
       const rnd = DECK.rng(9);
