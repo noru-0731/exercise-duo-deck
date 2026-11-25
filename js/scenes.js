@@ -121,11 +121,11 @@
   S.s6 = {
     build() {
       this.svg = DECK.svg($('s6'));
-      this.d = DECK.dots(this.svg, 26, 28);
+      this.d = DECK.dots(this.svg, 26, 16);
     },
     reset() {
       this.d.forEach((c, i) => {
-        DECK.pos(c, 140 + (i % 13) * 76, 540 + Math.floor(i / 13) * 80);
+        DECK.pos(c, 128 + i * 36 + (i >= 11 ? 30 : 0) + (i >= 16 ? 30 : 0), 604);
         DECK.fill(c, i < 11 ? C.a : i < 16 ? C.a2 : C.g2, 0);
       });
     },
@@ -138,17 +138,22 @@
   S.s7 = {
     build() {
       this.svg = DECK.svg($('s7'));
-      this.d = DECK.dots(this.svg, 50, 13);
+      this.alone = DECK.dots(this.svg, 200, 11);   // 점 하나가 0.5%
+      this.uk = DECK.dots(this.svg, 50, 13);
     },
     reset() {
-      this.d.forEach((c, i) => {
-        const r = Math.floor(i / 25), col = i % 25;
-        DECK.pos(c, 612 + col * 36, 766 + r * 40);
+      this.alone.forEach((c, i) => {
+        DECK.pos(c, 122 + (i % 20) * 31, 520 + Math.floor(i / 20) * 31);
+        DECK.fill(c, i >= 193 ? C.ink : C.g2, 0);
+      });
+      this.uk.forEach((c, i) => {
+        DECK.pos(c, 860 + (i % 25) * 31, 446 + 0 + 0 + (Math.floor(i / 25) * 40) + 330);
         DECK.fill(c, i < 43 ? C.a : C.g2, 0);
       });
     },
     step(sec, k, instant) {
-      if (k === 2) this.d.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : 600 + i * 30) + 'ms'; c.style.opacity = 1; });
+      if (k === 1) this.alone.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : 300 + i * 4) + 'ms'; c.style.opacity = 1; });
+      if (k === 2) this.uk.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : 600 + i * 30) + 'ms'; c.style.opacity = 1; });
     },
   };
 
@@ -180,13 +185,11 @@
   };
 
   /* ── 10장: 점 20개를 아무렇게나, 그다음 비슷한 사람끼리 잇는다 ── */
-  const S10 = { n: 20, y: 500 };
+  const S10 = { n: 20, y: 500, yA: 460, yB: 660 };
   (function () {
     const rnd = DECK.rng(42);
     const v = [];
-    for (let i = 0; i < S10.n; i++) {
-      v.push(170 + ((i + 0.15 + rnd() * 0.7) / S10.n) * 1600); // 고르게 퍼진 자리
-    }
+    for (let i = 0; i < S10.n; i++) v.push(380 + ((i + 0.15 + rnd() * 0.7) / S10.n) * 1160);
     v.sort((a, b) => a - b);
     S10.x = v;
     const idx = [...Array(S10.n).keys()];
@@ -197,34 +200,38 @@
   })();
   function arc(svg, x1, x2, y, col, w) {
     const dx = Math.abs(x2 - x1);
-    const h = Math.min(185, 24 + dx * 0.32);
+    const h = Math.min(92, 14 + dx * 0.16);
     const p = DECK.el(svg, 'path', { d: `M${x1} ${y} Q${(x1 + x2) / 2} ${y - h * 2} ${x2} ${y}`, fill: 'none', stroke: col, 'stroke-width': w, 'stroke-linecap': 'round' });
     return p;
   }
   S.s10 = {
     build() {
       const svg = (this.svg = DECK.svg($('s10')));
-      DECK.el(svg, 'line', { x1: 120, y1: S10.y + 2, x2: 1800, y2: S10.y + 2, stroke: C.g3, 'stroke-width': 3 });
-      this.ra = S10.rand.map(([a, b]) => arc(svg, S10.x[a], S10.x[b], S10.y - 14, C.g2, 4));
-      this.na = S10.near.map(([a, b]) => arc(svg, S10.x[a], S10.x[b], S10.y - 14, C.a, 6));
+      DECK.el(svg, 'line', { x1: 360, y1: S10.yA + 2, x2: 1560, y2: S10.yA + 2, stroke: C.g3, 'stroke-width': 3 });
+      this.lineB = DECK.el(svg, 'line', { x1: 360, y1: S10.yB + 2, x2: 1560, y2: S10.yB + 2, stroke: C.a3, 'stroke-width': 3 });
+      this.ra = S10.rand.map(([a, b]) => arc(svg, S10.x[a], S10.x[b], S10.yA - 14, C.g1, 4));
+      this.na = S10.near.map(([a, b]) => arc(svg, S10.x[a], S10.x[b], S10.yB - 14, C.a, 6));
       this.d = DECK.dots(svg, S10.n, 13);
+      this.e = DECK.dots(svg, S10.n, 13);
     },
     reset() {
-      this.d.forEach((c) => { DECK.pos(c, 960, S10.y); DECK.fill(c, C.a, 1); });
+      this.d.forEach((c) => { DECK.pos(c, 960, S10.yA); DECK.fill(c, C.ink, 1); });
+      this.e.forEach((c, i) => { DECK.pos(c, S10.x[i], S10.yA); DECK.fill(c, C.a, 0); });
       this.ra.forEach((p) => { p.style.opacity = 0; });
       this.na.forEach((p) => { p.style.opacity = 0; });
+      this.lineB.style.opacity = 0;
     },
-    start() {
-      this.d.forEach((c, i) => { DECK.pos(c, S10.x[i], S10.y, i * 20); DECK.fill(c, C.ink); });
-    },
+    start() { this.d.forEach((c, i) => DECK.pos(c, S10.x[i], S10.yA, i * 20)); },
     step(sec, k, instant) {
-      if (k === 1) this.ra.forEach((p, i) => { p.style.transitionDelay = (instant ? 0 : 1300 + i * 120) + 'ms'; p.style.opacity = 1; });
+      const D = (ms) => (instant ? 0 : ms) + 'ms';
+      if (k === 1) this.ra.forEach((p, i) => { p.style.transitionDelay = D(500 + i * 90); p.style.opacity = 1; });
       if (k === 3) {
-        this.ra.forEach((p) => { p.style.transitionDelay = '0ms'; p.style.opacity = 0.35; });
-        this.na.forEach((p, i) => { p.style.transitionDelay = (instant ? 0 : 400 + i * 90) + 'ms'; p.style.opacity = 1; });
+        this.lineB.style.transitionDelay = D(0); this.lineB.style.opacity = 1;
+        this.e.forEach((c, i) => { c.style.transitionDelay = D(i * 20); c.style.opacity = 1; DECK.pos(c, S10.x[i], S10.yB, instant ? 0 : i * 20); });
+        this.na.forEach((p, i) => { p.style.transitionDelay = D(900 + i * 80); p.style.opacity = 1; });
       }
     },
-    finish() { this.d.forEach((c, i) => { DECK.pos(c, S10.x[i], S10.y); DECK.fill(c, C.ink); }); },
+    finish() { this.d.forEach((c, i) => DECK.pos(c, S10.x[i], S10.yA)); },
   };
 
   /* ── 11장: 점이 열, 스물, 마흔의 세 무리가 된다 ── */
