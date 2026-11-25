@@ -3,7 +3,9 @@
   const RATE = 5;          // 1초에 읽는 글자 수 (1분에 300자)
   const LEAD_IN = 400;     // 장을 넘기고 첫 차례까지
   const params = new URLSearchParams(location.search);
-  const FINAL = !params.has('narr');   // 기본은 장을 넘기면 한 번에 모두. ?narr 는 나레이션 속도로 차례 등장
+  const FINAL = params.has('final');
+  const NARR = params.has('narr');   // 기본은 장을 넘기면 움직임이 짧은 간격으로 주르륵. ?narr 는 나레이션 속도
+  const GAP = 380;                   // 기본 방식에서 차례 사이 간격(ms)
   const SPEED = parseFloat(params.get('speed') || '1');
 
   window.DECK = { scenes: {}, FINAL };
@@ -76,7 +78,8 @@
     sec.classList.add('final');
     resetSec(sec);
     void sec.offsetWidth;
-    const { times } = stepTimes(sec);
+    let { times } = stepTimes(sec);
+    if (!NARR) times = times.map((_, i) => i * GAP);
     requestAnimationFrame(() => requestAnimationFrame(() => {
       sec.classList.remove('final');
       const sc = DECK.scenes[sec.id];
@@ -137,7 +140,7 @@
     });
     // 지금 장을 처음부터 다시: R 키
     Reveal.addKeyBinding({ keyCode: 82, key: 'R', description: '지금 장을 처음부터 다시' }, () => {
-      clearTimers(); const s = Reveal.getCurrentSlide(); if (FINAL) { showFinal(s); return; } play(s);
+      clearTimers(); const s = Reveal.getCurrentSlide(); play(s);
       const sc = DECK.scenes[s.id]; if (sc && sc.enter) sc.enter(s, true);
     });
   });
