@@ -81,7 +81,7 @@
         DECK.fill(c, i < 11 ? C.a : i < 16 ? C.a2 : C.g2, 0);
       });
       DECK.pos(this.lone, 520, 861); DECK.fill(this.lone, C.g1, 0);
-      DECK.pos(this.come, 1860, 861); DECK.fill(this.come, C.a, 0);
+      DECK.pos(this.come, 1700, 861); DECK.fill(this.come, C.a, 0);
       this.line.style.opacity = 0;
     },
     step(sec, k, instant) {
@@ -89,8 +89,8 @@
       if (k === 2) this.d.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : i * 45) + 'ms'; c.style.opacity = 1; });
       if (k === 3) {
         this.lone.style.transitionDelay = '0ms'; this.lone.style.opacity = 1;
-        this.come.style.opacity = 1;
-        DECK.pos(this.come, 1180, 861, instant ? 0 : 500);
+        this.come.style.transitionDelay = instant ? '0ms' : '300ms'; this.come.style.opacity = 1;
+        DECK.pos(this.come, 1180, 861, instant ? 0 : 300);
         this.line.style.transitionDelay = instant ? '0ms' : '1700ms';
         this.line.style.opacity = 1;
       }
@@ -126,9 +126,9 @@
         const x = x0 + i * (w + gap);
         const s = i < 4 ? 1 : 2;
         const d = i < 4 ? i * 120 : (i - 4) * 160;
-        const lead = i < 4 ? 'background:var(--g2)' : i < 8 ? 'background:repeating-linear-gradient(135deg,var(--g3) 0 10px,#fff 10px 20px);border:2px solid var(--g2)' : 'border:2px dashed var(--g3)';
+        const lead = i < 4 ? 'background:var(--g2)' : i < 8 ? 'background:repeating-linear-gradient(135deg,var(--g3) 0 10px,#fff 10px 20px);border:2px solid var(--g2)' : 'border:2px dashed var(--g1)';
         const pair = i < 4 ? 'var(--a2)' : i < 8 ? 'var(--a1)' : 'var(--a)';
-        html += `<div class="ab mut" data-s="${s}" style="left:${x}px;top:296px;width:${w}px;text-align:center;font-size:20px;transition-delay:${d}ms">${i + 1}주</div>`;
+        html += `<div class="ab mut" data-s="${s}" style="left:${x}px;top:296px;width:${w}px;text-align:center;font-size:19px;transition-delay:${d}ms">${i + 1}주</div>`;
         html += `<div class="ab" data-s="${s}" style="left:${x}px;top:336px;width:${w}px;height:90px;border-radius:10px;${lead};transition-delay:${d}ms"></div>`;
         html += `<div class="ab" data-s="${s}" style="left:${x}px;top:446px;width:${w}px;height:90px;border-radius:10px;background:${pair};transition-delay:${d + 80}ms"></div>`;
       }
@@ -149,7 +149,7 @@
         const g = DECK.el(this.svg, 'g', {});
         DECK.el(g, 'line', { x1: bx + 190, y1: 830, x2: bx + 340, y2: 830, stroke: C.a, 'stroke-width': lw[p], 'stroke-linecap': 'round' });
         if (leadR[p]) DECK.el(g, 'circle', { cx: bx + 70, cy: 830, r: leadR[p], fill: C.g2 });
-        else DECK.el(g, 'circle', { cx: bx + 70, cy: 830, r: 26, fill: 'none', stroke: C.g3, 'stroke-width': 3, 'stroke-dasharray': '6 6' });
+        else DECK.el(g, 'circle', { cx: bx + 70, cy: 830, r: 26, fill: 'none', stroke: C.g1, 'stroke-width': 3, 'stroke-dasharray': '6 6' });
         DECK.el(g, 'circle', { cx: bx + 190, cy: 830, r: 20, fill: C.a });
         DECK.el(g, 'circle', { cx: bx + 340, cy: 830, r: 20, fill: C.a });
         const t = DECK.el(g, 'text', { x: bx + 70, y: 902, 'text-anchor': 'middle', 'font-size': 19, fill: '#6B7280' });
@@ -343,12 +343,12 @@
       }
       if (k === 2) this.p.forEach((q) => {
         if (q.st >= 1) this.set(q.c, this.col.pass, 0, 700, I);
-        else { this.set(q.c, this.col.ghost, 0, 700, I); this.set(q.gr, 0.18, 0, 900, I); this.set(q.al, 0.7, 0, 700, I); }
+        else { this.set(q.c, this.col.ghost, 0, 700, I); this.set(q.al, 0.35, 0, 700, I); }
       });
       if (k === 3) {
         this.p.forEach((q) => {
-          if (q.st === 1) { this.set(q.c, this.col.g, 0, 700, I); this.set(q.gr, 0.45, 0, 900, I); }
-          if (q.st === 2) { this.set(q.c, this.col.g, 500, 700, I); this.set(q.gr, 0.6, 500, 900, I); }
+          if (q.st === 1) { this.set(q.c, this.col.g, 0, 700, I); this.set(q.al, 0.6, 0, 700, I); }
+          if (q.st === 2) { this.set(q.c, this.col.g, 500, 700, I); this.set(q.al, 0.8, 500, 700, I); }
           if (q.st === 3) this.set(q.c, this.col.a1, 500, 700, I);
         });
         this.set(this.cenA, 1, 200, 900, I);

@@ -27,7 +27,7 @@
 }
 
 html, body { background: var(--bg); }
-.reveal { word-break: keep-all; font-family: 'Pretendard Variable', Pretendard, -apple-system, sans-serif; color: var(--ink); }
+.reveal { letter-spacing: -0.02em; word-break: keep-all; font-family: 'Pretendard Variable', Pretendard, -apple-system, sans-serif; color: var(--ink); }
 .reveal .slides { text-align: left; }
 .reveal .slides > section {
   width: 1920px; height: 1080px; padding: 0; top: 0 !important; left: 0;
@@ -78,7 +78,7 @@ html, body { background: var(--bg); }
 .bar.a2 { background: var(--a2); }
 
 /* 인용 */
-.quote { font-size: 52px; font-weight: 560; line-height: 1.4; letter-spacing: -0.03em; color: var(--ink); }
+.reveal p.quote { font-size: 52px; font-weight: 560; line-height: 1.4; letter-spacing: -0.03em; color: var(--ink); }
 .quote { text-wrap: balance; }
 .quote::before { content: ''; display: block; width: 56px; height: 6px; border-radius: 3px; background: var(--a1); margin-bottom: 26px; }
 .cite { font-size: 19px; color: var(--mut); margin-top: 18px; }
@@ -162,3 +162,8 @@ svg line, svg path { transition: stroke .8s var(--ease), stroke-width .8s var(--
 .s14-d .r span { width: 230px; font-size: 19px; color: var(--ink2); flex: none; }
 .s14-d .r b { width: 140px; font-size: 28px; font-weight: 680; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; flex: none; }
 .s14-d .r em { font-style: normal; font-size: 19px; color: var(--mut); }
+
+.reveal h2.head { letter-spacing: -0.035em; }
+.reveal .big { letter-spacing: -0.03em; }
+.s14-holo .key i.k-c { border-radius: 50%; }
+.a1-list .lb { width: 150px; }

@@ -79,7 +79,7 @@
     resetSec(sec);
     void sec.offsetWidth;
     let { times } = stepTimes(sec);
-    if (!NARR) times = times.map((_, i) => i * GAP);
+    if (!NARR) { const gp = parseInt(sec.dataset.gap || GAP, 10); times = times.map((_, i) => i * gp); }
     requestAnimationFrame(() => requestAnimationFrame(() => {
       sec.classList.remove('final');
       const sc = DECK.scenes[sec.id];
