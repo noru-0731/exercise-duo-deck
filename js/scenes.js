@@ -23,7 +23,7 @@
     reset() {
       const rnd = DECK.rng(7);
       this.d.forEach((c) => {
-        DECK.pos(c, 272 + rnd() * 1443, 360 + rnd() * 150);
+        DECK.pos(c, 72 + rnd() * 1776, 410 + rnd() * 320);
         DECK.fill(c, C.g2, 1);
       });
     },
@@ -278,20 +278,20 @@
   S.s13 = {
     build() {
       this.svg = DECK.svg($('s13'));
-      const tops = [440, 384, 372, 330], lefts = [72, 524, 976, 1428];
+      const tops = [440, 384, 440], lefts = [72, 680, 1288];
       this.rows = tops.map((t, b) => {
         const arr = DECK.dots(this.svg, 10, 11);
-        arr.forEach((c, i) => DECK.pos(c, lefts[b] + 40 + i * 38, t - 26));
+        arr.forEach((c, i) => DECK.pos(c, lefts[b] + 40 + i * 50, t - 26));
         return arr;
       });
-      this.op = [0.3, 0.55, 0.8, 1];
+      this.op = [0.3, 0.6, 1];
     },
     reset() { this.rows.forEach((arr) => arr.forEach((c) => DECK.fill(c, C.a, 0))); },
     step(sec, k, instant) {
       const show = (b, base) => this.rows[b].forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : base + i * 50) + 'ms'; c.style.opacity = this.op[b]; });
       if (k === 1) show(0, 600);
       if (k === 2) show(1, 600);
-      if (k === 3) { show(2, 600); show(3, 1100); }
+      if (k === 3) show(2, 600);
     },
   };
 
