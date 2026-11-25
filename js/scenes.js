@@ -339,7 +339,7 @@
       const I = instant;
       if (k === 1) {
         this.set(this.gridA, 1, 0, 700, I);
-        this.p.forEach((q) => this.set(q.gr, 1, 150 + (q.x + 160) * 4.2 + Math.random() * 120, 1100, I));
+        this.p.forEach((q) => this.set(q.gr, 1, 50 + (q.x + 160) * 2 + Math.random() * 80, 900, I));
       }
       if (k === 2) this.p.forEach((q) => {
         if (q.st >= 1) this.set(q.c, this.col.pass, 0, 700, I);
