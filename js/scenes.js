@@ -70,30 +70,16 @@
   S.s6 = {
     build() {
       this.svg = DECK.svg($('s6'));
-      this.d = DECK.dots(this.svg, 26, 24);
-      this.line = DECK.el(this.svg, 'line', { x1: 520, y1: 861, x2: 1180, y2: 861, stroke: C.a, 'stroke-width': 6, 'stroke-linecap': 'round' });
-      this.lone = DECK.el(this.svg, 'circle', { cx: 0, cy: 0, r: 20 });
-      this.come = DECK.el(this.svg, 'circle', { cx: 0, cy: 0, r: 20 });
+      this.d = DECK.dots(this.svg, 26, 28);
     },
     reset() {
       this.d.forEach((c, i) => {
-        DECK.pos(c, 130 + (i % 13) * 74, 560 + Math.floor(i / 13) * 62);
+        DECK.pos(c, 140 + (i % 13) * 76, 540 + Math.floor(i / 13) * 80);
         DECK.fill(c, i < 11 ? C.a : i < 16 ? C.a2 : C.g2, 0);
       });
-      DECK.pos(this.lone, 520, 861); DECK.fill(this.lone, C.g1, 0);
-      DECK.pos(this.come, 1700, 861); DECK.fill(this.come, C.a, 0);
-      this.line.style.opacity = 0;
     },
     step(sec, k, instant) {
-      if (k === 1) { this.lone.style.opacity = 0; }
       if (k === 2) this.d.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : i * 45) + 'ms'; c.style.opacity = 1; });
-      if (k === 3) {
-        this.lone.style.transitionDelay = '0ms'; this.lone.style.opacity = 1;
-        this.come.style.transitionDelay = instant ? '0ms' : '300ms'; this.come.style.opacity = 1;
-        DECK.pos(this.come, 1180, 861, instant ? 0 : 300);
-        this.line.style.transitionDelay = instant ? '0ms' : '1700ms';
-        this.line.style.opacity = 1;
-      }
     },
   };
 
@@ -118,7 +104,6 @@
   /* ── 9장: 12주 띠와 세 시기 ── */
   S.s9 = {
     build() {
-      const sec = $('s9');
       const box = $('s9-weeks');
       const x0 = 260, w = 122, gap = 10.6;
       let html = '';
@@ -128,41 +113,18 @@
         const d = i < 4 ? i * 120 : (i - 4) * 160;
         const lead = i < 4 ? 'background:var(--g2)' : i < 8 ? 'background:repeating-linear-gradient(135deg,var(--g3) 0 10px,#fff 10px 20px);border:2px solid var(--g2)' : 'border:2px dashed var(--g1)';
         const pair = i < 4 ? 'var(--a2)' : i < 8 ? 'var(--a1)' : 'var(--a)';
-        html += `<div class="ab mut" data-s="${s}" style="left:${x}px;top:296px;width:${w}px;text-align:center;font-size:19px;transition-delay:${d}ms">${i + 1}주</div>`;
-        html += `<div class="ab" data-s="${s}" style="left:${x}px;top:336px;width:${w}px;height:90px;border-radius:10px;${lead};transition-delay:${d}ms"></div>`;
-        html += `<div class="ab" data-s="${s}" style="left:${x}px;top:446px;width:${w}px;height:90px;border-radius:10px;background:${pair};transition-delay:${d + 80}ms"></div>`;
+        html += `<div class="ab mut" data-s="${s}" style="left:${x}px;top:290px;width:${w}px;text-align:center;font-size:19px;transition-delay:${d}ms">${i + 1}주</div>`;
+        html += `<div class="ab" data-s="${s}" style="left:${x}px;top:326px;width:${w}px;height:160px;border-radius:12px;${lead};transition-delay:${d}ms"></div>`;
+        html += `<div class="ab" data-s="${s}" style="left:${x}px;top:504px;width:${w}px;height:160px;border-radius:12px;background:${pair};transition-delay:${d + 80}ms"></div>`;
       }
       box.innerHTML = html;
       const ph = $('s9-phase');
-      ph.style.left = x0 + 'px'; ph.style.top = '556px'; ph.style.width = (1848 - x0) + 'px';
-      const pw = 4 * (w + gap);
+      ph.style.left = x0 + 'px'; ph.style.width = (1848 - x0) + 'px';
+      const card = (s, d, t, b, a) => `<div class="card${a ? ' tint' : ''}" data-s="${s}" style="position:relative;flex:1;height:166px;transition-delay:${d}ms;${a ? 'border-color:var(--a2)' : ''}"><div style="font-size:22px;font-weight:600;color:${a ? 'var(--at)' : 'var(--mut)'}">${t}</div><div style="font-size:28px;font-weight:600;color:${a ? 'var(--at)' : 'var(--ink)'};margin-top:10px;line-height:1.4">${b}</div></div>`;
       ph.innerHTML =
-        `<div data-s="1" style="width:${pw}px">1~4주 지도자가 집으로 찾아가 매번 같이</div>` +
-        `<div data-s="2" style="width:${pw}px;transition-delay:200ms">5~8주 지도자는 한 번씩 빠진다</div>` +
-        `<div data-s="2" style="width:${pw}px;transition-delay:800ms;color:var(--at);font-weight:600">9~12주 짝끼리</div>`;
-
-      this.svg = DECK.svg(sec);
-      this.parts = [];
-      const leadR = [44, 28, 0], lw = [3, 8, 16];
-      for (let p = 0; p < 3; p++) {
-        const bx = 110 + p * 433;
-        const g = DECK.el(this.svg, 'g', {});
-        DECK.el(g, 'line', { x1: bx + 190, y1: 830, x2: bx + 340, y2: 830, stroke: C.a, 'stroke-width': lw[p], 'stroke-linecap': 'round' });
-        if (leadR[p]) DECK.el(g, 'circle', { cx: bx + 70, cy: 830, r: leadR[p], fill: C.g2 });
-        else DECK.el(g, 'circle', { cx: bx + 70, cy: 830, r: 26, fill: 'none', stroke: C.g1, 'stroke-width': 3, 'stroke-dasharray': '6 6' });
-        DECK.el(g, 'circle', { cx: bx + 190, cy: 830, r: 20, fill: C.a });
-        DECK.el(g, 'circle', { cx: bx + 340, cy: 830, r: 20, fill: C.a });
-        const t = DECK.el(g, 'text', { x: bx + 70, y: 902, 'text-anchor': 'middle', 'font-size': 19, fill: '#6B7280' });
-        t.textContent = '지도자';
-        const t2 = DECK.el(g, 'text', { x: bx + 265, y: 902, 'text-anchor': 'middle', 'font-size': 19, fill: '#C8414F' });
-        t2.textContent = '짝';
-        g.style.transition = 'opacity .8s';
-        this.parts.push(g);
-      }
-    },
-    reset() { this.parts.forEach((g) => { g.style.opacity = 0; }); },
-    step(sec, k, instant) {
-      if (k === 3) this.parts.forEach((g, p) => { g.style.transitionDelay = (instant ? 0 : 300 + p * 900) + 'ms'; g.style.opacity = 1; });
+        card(1, 0, '1~4주', '지도자가 집으로 찾아가 데리고 나온다. 매번 같이 한다', false) +
+        card(2, 200, '5~8주', '지도자는 한 번씩 빠진다', false) +
+        card(2, 800, '9~12주', '짝끼리 한다', true);
     },
   };
 
@@ -275,25 +237,7 @@
   };
 
   /* ── 13장: 흐린 점이 칸마다 진해진다 ── */
-  S.s13 = {
-    build() {
-      this.svg = DECK.svg($('s13'));
-      const tops = [440, 384, 440], lefts = [72, 680, 1288];
-      this.rows = tops.map((t, b) => {
-        const arr = DECK.dots(this.svg, 10, 11);
-        arr.forEach((c, i) => DECK.pos(c, lefts[b] + 40 + i * 50, t - 26));
-        return arr;
-      });
-      this.op = [0.3, 0.6, 1];
-    },
-    reset() { this.rows.forEach((arr) => arr.forEach((c) => DECK.fill(c, C.a, 0))); },
-    step(sec, k, instant) {
-      const show = (b, base) => this.rows[b].forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : base + i * 50) + 'ms'; c.style.opacity = this.op[b]; });
-      if (k === 1) show(0, 600);
-      if (k === 2) show(1, 600);
-      if (k === 3) show(2, 600);
-    },
-  };
+  S.s13 = {};
 
   /* ── 14장: 동 427개를 세 기준으로 거른다 ── */
   /* 14장: 서울 427개 동을 입체 기둥으로. 높이는 혼자 사는 수급 노인 수. 시점이 천천히 돈다 */
