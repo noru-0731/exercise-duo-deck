@@ -20,12 +20,14 @@
         const f = DECK.el(defs, 'filter', { id: 'goo-' + id, x: 0, y: 0, width: 1920, height: 1080, filterUnits: 'userSpaceOnUse' });
         DECK.el(f, 'feGaussianBlur', { in: 'SourceGraphic', stdDeviation: 9, result: 'b' });
         DECK.el(f, 'feColorMatrix', { in: 'b', mode: 'matrix', values: '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9' });
-        const cols = 8, rows = 10, x0 = 1180, y0 = 120, gx = 86, gy = 86;
+        const cols = 11, rows = 10, x0 = 922, y0 = 120, gx = 86, gy = 86;
         this.pts = [];
         for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) this.pts.push([x0 + c * gx + (r % 2) * 43, y0 + r * gy]);
         const P = (r, c) => r * cols + c;
-        this.pairs = [[P(0, 2), P(0, 3)], [P(0, 6), P(1, 6)], [P(1, 4), P(2, 4)], [P(2, 0), P(2, 1)], [P(3, 3), P(3, 4)], [P(4, 6), P(5, 6)],
-          [P(5, 1), P(5, 2)], [P(6, 4), P(6, 5)], [P(7, 0), P(8, 0)], [P(7, 6), P(7, 7)], [P(8, 3), P(8, 4)], [P(9, 1), P(9, 2)]];
+        const Q = (r, c) => P(r, c + 3);   // 처음 짠 8칸 기준 짝을 오른쪽에 그대로 둔다
+        this.pairs = [[Q(0, 2), Q(0, 3)], [Q(0, 6), Q(1, 6)], [Q(1, 4), Q(2, 4)], [Q(2, 0), Q(2, 1)], [Q(3, 3), Q(3, 4)], [Q(4, 6), Q(5, 6)],
+          [Q(5, 1), Q(5, 2)], [Q(6, 4), Q(6, 5)], [Q(7, 0), Q(8, 0)], [Q(7, 6), Q(7, 7)], [Q(8, 3), Q(8, 4)], [Q(9, 1), Q(9, 2)],
+          [P(1, 0), P(1, 1)], [P(3, 1), P(4, 1)], [P(6, 0), P(6, 1)], [P(8, 1), P(9, 0)]];
         this.mate = new Map();
         this.pairs.forEach(([a, b]) => { this.mate.set(a, b); this.mate.set(b, a); });
         const gGray = DECK.el(this.svg, 'g', {});
@@ -110,7 +112,7 @@
     start() {
       const rnd = DECK.rng(3);
       this.d.forEach((c, j) => {
-        DECK.pos(c, 130 + (j % 5) * 50, 812 - Math.floor(j / 5) * 50, Math.floor(rnd() * 500));
+        DECK.pos(c, 160 + (j % 5) * 50, 812 - Math.floor(j / 5) * 50, Math.floor(rnd() * 500));
       });
     },
     step(sec, k) { if (k === 2) this.d.forEach((c) => { c.style.transitionDelay = '0ms'; c.style.opacity = 0; }); },
@@ -139,7 +141,7 @@
     build() {
       this.svg = DECK.svg($('s7'));
       this.alone = DECK.dots(this.svg, 200, 11);   // 점 하나가 0.5%
-      this.uk = DECK.dots(this.svg, 50, 13);
+      this.uk = DECK.dots(this.svg, 50, 14);
     },
     reset() {
       this.alone.forEach((c, i) => {
@@ -147,7 +149,7 @@
         DECK.fill(c, i >= 193 ? C.ink : C.g2, 0);
       });
       this.uk.forEach((c, i) => {
-        DECK.pos(c, 860 + (i % 25) * 31, 446 + 0 + 0 + (Math.floor(i / 25) * 40) + 330);
+        DECK.pos(c, 862 + (i % 25) * 31.5, 718 + Math.floor(i / 25) * 44);
         DECK.fill(c, i < 43 ? C.a : C.g2, 0);
       });
     },
@@ -163,13 +165,13 @@
   S.s8 = {
     build() {
       this.svg = DECK.svg($('s8'));
-      this.d = DECK.dots(this.svg, 100, 13);
+      this.d = DECK.dots(this.svg, 200, 10);   // 다시 측정하러 온 사람 3.5%: 200개 가운데 7개
     },
     reset() {
-      this.d.forEach((c, i) => { DECK.pos(c, 1292 + (i % 10) * 33, 432 + Math.floor(i / 10) * 33); DECK.fill(c, i < 63 ? C.a : C.g2, 0); });
+      this.d.forEach((c, i) => { DECK.pos(c, 1252 + (i % 20) * 28.6, 466 + Math.floor(i / 20) * 28); DECK.fill(c, i >= 193 ? C.a : C.g2, 0); });
     },
     step(sec, k, instant) {
-      if (k === 2) this.d.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : 200 + i * 12) + 'ms'; c.style.opacity = 1; });
+      if (k === 2) this.d.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : 200 + i * 5) + 'ms'; c.style.opacity = 1; });
     },
   };
 
@@ -185,17 +187,17 @@
         const lead = i < 4 ? 'background:var(--g2)' : i < 8 ? 'background:repeating-linear-gradient(135deg,var(--g3) 0 10px,#fff 10px 20px);border:2px solid var(--g2)' : 'border:2px dashed var(--g1)';
         const pair = i < 4 ? 'var(--a2)' : i < 8 ? 'var(--a1)' : 'var(--a)';
         html += `<div class="ab mut" data-s="${s}" style="left:${x}px;top:290px;width:${w}px;text-align:center;font-size:19px;transition-delay:${d}ms">${i + 1}주</div>`;
-        html += `<div class="ab" data-s="${s}" style="left:${x}px;top:326px;width:${w}px;height:160px;border-radius:12px;${lead};transition-delay:${d}ms"></div>`;
-        html += `<div class="ab" data-s="${s}" style="left:${x}px;top:504px;width:${w}px;height:160px;border-radius:12px;background:${pair};transition-delay:${d + 80}ms"></div>`;
+        html += `<div class="ab" data-s="${s}" style="left:${x}px;top:326px;width:${w}px;height:170px;border-radius:12px;${lead};transition-delay:${d}ms"></div>`;
+        html += `<div class="ab" data-s="${s}" style="left:${x}px;top:512px;width:${w}px;height:170px;border-radius:12px;background:${pair};transition-delay:${d + 80}ms"></div>`;
       }
       box.innerHTML = html;
       const ph = $('s9-phase');
       ph.style.left = x0 + 'px'; ph.style.width = (1848 - x0) + 'px';
-      const card = (s, d, t, b, a) => `<div class="card${a ? ' tint' : ''}" data-s="${s}" style="position:relative;flex:1;height:166px;transition-delay:${d}ms;${a ? 'border-color:var(--a2)' : ''}"><div style="font-size:22px;font-weight:600;color:${a ? 'var(--at)' : 'var(--mut)'}">${t}</div><div style="font-size:28px;font-weight:600;color:${a ? 'var(--at)' : 'var(--ink)'};margin-top:10px;line-height:1.4">${b}</div></div>`;
+      const card = (s, d, t, b, a) => `<div class="card${a ? ' tint' : ''}" data-s="${s}" style="position:relative;flex:1;height:170px;transition-delay:${d}ms;${a ? 'border-color:var(--a2)' : ''}"><div style="font-size:22px;font-weight:600;color:${a ? 'var(--at)' : 'var(--mut)'}">${t}</div><div style="font-size:28px;font-weight:600;color:${a ? 'var(--at)' : 'var(--ink)'};margin-top:10px;line-height:1.4">${b}</div></div>`;
       ph.innerHTML =
         card(1, 0, '1~4주', '지도자가 집으로 찾아가 데리고 나온다. 매번 같이 한다', false) +
-        card(2, 200, '5~8주', '지도자는 한 번씩 빠진다', false) +
-        card(2, 800, '9~12주', '짝끼리 한다', true);
+        card(2, 200, '5~8주', '지도자는 한 번씩 빠진다. 빠진 날은 짝끼리 한다', false) +
+        card(2, 800, '9~12주', '짝끼리 한다. 12주에 다시 측정한다', true);
     },
   };
 
@@ -258,7 +260,7 @@
       for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) out.push([cx0 + c * gx, cy0 + r * gy]);
       return out;
     };
-    S11.small = { centers: pairs(162, 664, 5, 1, 130, 0), good: new Set([2]) };
+    S11.small = { centers: pairs(166, 722, 5, 1, 128, 0), good: new Set([2]) };
     S11.big = { centers: pairs(960, 572, 5, 4, 190, 88), good: new Set([0, 2, 3, 5, 7, 8, 10, 12, 14, 16, 19]) };
     S11.big.pts = [];
     S11.big.centers.forEach(([x, y]) => { S11.big.pts.push([x - 30, y]); S11.big.pts.push([x + 30, y]); });
@@ -273,22 +275,24 @@
       const gGray = DECK.el(this.svg, 'g', {}), gGood = DECK.el(this.svg, 'g', { filter: 'url(#goo-s11)' });
       this.sets = [S11.small, S11.big].map((S, si) => S.centers.map(([x, y], k) => {
         const good = S.good.has(k), g = good ? gGood : gGray;
-        return { x, y, good, si, a: DECK.el(g, 'circle', { cx: 0, cy: 0, r: good ? 23 : 20 }), b: DECK.el(g, 'circle', { cx: 0, cy: 0, r: good ? 23 : 20 }) };
+        const r = (good ? 23 : 20) * (si === 0 ? 1.15 : 1);
+        return { x, y, good, si, a: DECK.el(g, 'circle', { cx: 0, cy: 0, r }), b: DECK.el(g, 'circle', { cx: 0, cy: 0, r }) };
       }));
       this.t = [];
     },
     place(p, gap) { DECK.pos(p.a, p.x - gap, p.y); DECK.pos(p.b, p.x + gap, p.y); },
     reset() {
       this.t.forEach(clearTimeout); this.t = [];
-      this.sets.flat().forEach((p) => { this.place(p, p.good ? 32 : 25); [p.a, p.b].forEach((c) => DECK.fill(c, p.good ? C.a : C.g2, 0)); });
+      this.sets.flat().forEach((p) => { this.place(p, (p.good ? 32 : 25) * (p.si === 0 ? 1.15 : 1)); [p.a, p.b].forEach((c) => DECK.fill(c, p.good ? C.a : C.g2, 0)); });
     },
     step(sec, k, instant) {
       const si = k - 1; if (si > 1) return;
       this.sets[si].forEach((p, n) => {
         [p.a, p.b].forEach((c) => { c.style.transitionDelay = (instant ? 0 : n * 30) + 'ms'; c.style.opacity = 1; });
         if (!p.good) return;
-        if (instant) { this.place(p, 22); return; }
-        this.t.push(setTimeout(() => this.place(p, 22), 800 + n * 60));
+        const jg = 22 * (p.si === 0 ? 1.15 : 1);
+        if (instant) { this.place(p, jg); return; }
+        this.t.push(setTimeout(() => this.place(p, jg), 800 + n * 60));
       });
     },
   };
@@ -409,12 +413,12 @@
     enter() { this.run = true; const f = (now) => { if (!this.run) return; this.draw(now); requestAnimationFrame(f); }; requestAnimationFrame(f); },
     leave() { this.run = false; },
     proj(x, y, z, now) {
-      const yaw = -0.32 + Math.sin((now - this.t0) / 9000) * 0.16, pit = 0.62, S = 2.35;
+      const yaw = -0.32 + Math.sin((now - this.t0) / 9000) * 0.16, pit = 0.62, S = 2.5;
       const cy = Math.cos(yaw), sy = Math.sin(yaw);
       const X = x * cy - z * sy, Z = x * sy + z * cy;
       const depth = Z * Math.cos(pit) + y * Math.sin(pit);
       const f = 1100 / (1100 - depth * 1.2);
-      return [this.W / 2 + 10 + X * S * f, 360 + (Z * Math.sin(pit) - y * Math.cos(pit)) * S * f, depth, Z];
+      return [this.W / 2 + 46 + X * S * f, 366 + (Z * Math.sin(pit) - y * Math.cos(pit)) * S * f, depth, Z];
     },
     draw(now) {
       const g = this.g, W = this.W, H = this.H;
@@ -505,7 +509,7 @@
       DECK.el(f, 'feColorMatrix', { in: 'b', mode: 'matrix', values: '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9' });
       this.track = DECK.el(this.svg, 'line', { x1: 332, y1: 376, x2: 1588, y2: 376, stroke: C.g3, 'stroke-width': 4, 'stroke-linecap': 'round' });
       this.prog = DECK.el(this.svg, 'line', { x1: 332, y1: 376, x2: 332, y2: 376, stroke: C.a, 'stroke-width': 4, 'stroke-linecap': 'round' });
-      this.marks = [332, 960, 1588].map((x) => DECK.el(this.svg, 'circle', { cx: x, cy: 376, r: 9, fill: '#fff', stroke: C.a, 'stroke-width': 3 }));
+      this.marks = [332, 846, 1588].map((x) => DECK.el(this.svg, 'circle', { cx: x, cy: 376, r: 9, fill: '#fff', stroke: C.a, 'stroke-width': 3 }));
       const g = DECK.el(this.svg, 'g', { filter: 'url(#goo-s16)' });
       this.p = [DECK.el(g, 'circle', { cx: 0, cy: 0, r: 15 }), DECK.el(g, 'circle', { cx: 0, cy: 0, r: 15 })];
       this.t = [];

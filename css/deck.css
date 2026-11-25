@@ -139,7 +139,7 @@ svg line, svg path { transition: stroke .8s var(--ease), stroke-width .8s var(--
 .s15-c.done { opacity: .5; }
 
 /* 부록 1 목록 */
-.a1-list { margin-top: 18px; }
+.a1-list { margin-top: 18px; height: calc(100% - 56px); display: flex; flex-direction: column; justify-content: space-between; }
 .a1-list > div { display: flex; gap: 24px; padding: 30px 0; border-bottom: 1.5px solid var(--g3); }
 .a1-list.a > div { border-bottom-color: var(--a3); }
 .a1-list > div:last-child { border-bottom: 0; }
@@ -179,7 +179,7 @@ svg line, svg path { transition: stroke .8s var(--ease), stroke-width .8s var(--
 .sk-ev span { flex: none; width: 34px; font-size: 19px; font-weight: 650; color: var(--at); font-variant-numeric: tabular-nums; }
 
 /* 2장 이유 칸 */
-.s1-li { position: relative; padding-left: 24px; font-size: 22px; line-height: 1.45; color: var(--ink2); margin-top: 20px; }
+.s1-li { position: relative; padding-left: 24px; font-size: 22px; line-height: 1.45; color: var(--ink2); }
 .s1-li::before { content: ''; position: absolute; left: 2px; top: 13px; width: 8px; height: 8px; border-radius: 50%; background: var(--a); }
 
 /* 12장 결혼정보회사 대응 줄 */
