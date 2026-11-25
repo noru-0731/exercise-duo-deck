@@ -296,71 +296,153 @@
   };
 
   /* ── 14장: 동 427개를 세 기준으로 거른다 ── */
-  /* 14장: 서울 427개 동 기둥. 높이는 혼자 사는 수급 노인 수 */
+  /* 14장: 서울 427개 동을 입체 기둥으로. 높이는 혼자 사는 수급 노인 수. 시점이 천천히 돈다 */
   S.s14 = {
     build() {
-      const D = window.S14DATA, NS = DECK;
-      const P = (x, y) => [960 + (x - 4) * 2.9, 556 + (y + 135.74) * 1.0];
-      this.svg = DECK.svg($('s14'));
-      // 바닥: 동 중심점들을 감싸는 껍질
-      const pts = D.d.map((r) => P(r[0], r[1]));
-      const hull = (() => {
-        const p = pts.map((q) => q.slice()).sort((a, b) => a[0] - b[0] || a[1] - b[1]);
-        const cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
-        const lo = [], up = [];
-        p.forEach((q) => { while (lo.length >= 2 && cr(lo[lo.length - 2], lo[lo.length - 1], q) <= 0) lo.pop(); lo.push(q); });
-        p.slice().reverse().forEach((q) => { while (up.length >= 2 && cr(up[up.length - 2], up[up.length - 1], q) <= 0) up.pop(); up.push(q); });
-        return lo.slice(0, -1).concat(up.slice(0, -1));
-      })();
-      const cx = pts.reduce((a, q) => a + q[0], 0) / pts.length, cy = pts.reduce((a, q) => a + q[1], 0) / pts.length;
-      const poly = hull.map(([x, y]) => [cx + (x - cx) * 1.06, cy + (y - cy) * 1.1].map((v) => v.toFixed(1)).join(',')).join(' ');
-      this.ground = NS.el(this.svg, 'polygon', { points: poly, fill: '#EEF0F3', stroke: C.g2, 'stroke-width': 1.5, 'stroke-linejoin': 'round' });
-      // 체력인증센터
-      this.cen = D.c.map((r) => { const [x, y] = P(r[0], r[1]); return NS.el(this.svg, 'circle', { cx: x, cy: y, r: 7, fill: '#fff', stroke: '#4A505A', 'stroke-width': 3 }); });
-      // 기둥: 뒤에서 앞으로
-      const order = D.d.map((r, i) => i).sort((i, j) => pts[i][1] - pts[j][1]);
-      this.pl = [];
-      order.forEach((i) => {
-        const r = D.d[i], [x, y] = pts[i];
-        const h = Math.max(3, r[2] / 2452 * 250), w = r[4] ? 14 : 8;
-        const e = NS.el(this.svg, 'rect', { x: x - w / 2, y: y - h, width: w, height: h, rx: 2, class: 'pl' });
-        e._st = r[3]; e._top = r[4]; e._x = x; e._y = y; e._h = h;
-        this.pl.push(e);
-      });
-      const t = this.pl.find((e) => e._top);
-      this.lbl = NS.el(this.svg, 'g', {});
-      NS.el(this.lbl, 'rect', { x: t._x - 80, y: t._y - t._h - 60, width: 160, height: 44, rx: 10, fill: '#fff', stroke: C.a, 'stroke-width': 2 });
-      const tx = NS.el(this.lbl, 'text', { x: t._x, y: t._y - t._h - 30, 'text-anchor': 'middle', 'font-size': 23, 'font-weight': 650, fill: '#C8414F' });
-      tx.textContent = '등촌제3동';
-      this.lbl.style.transition = 'opacity .8s';
+      const D = window.S14DATA;
+      this.cv = $('s14-cv'); this.g = this.cv.getContext('2d');
+      this.W = 1128; this.H = 590; this.g.setTransform(2, 0, 0, 2, 0, 0);
+      const mx = D.d.reduce((a, r) => a + r[0], 0) / D.d.length, mz = D.d.reduce((a, r) => a + r[1], 0) / D.d.length;
+      this.mx = mx; this.mz = mz;
+      const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+      this.col = { base: hex('#C9CED5'), ghost: hex('#E3E6EA'), pass: hex('#F8C4C9'), g: hex('#AEB5BF'), a1: hex('#F39AA3'), a: hex('#EE6B78') };
+      this.p = D.d.map((r) => ({ x: r[0] - mx, z: r[1] - mz, h: Math.max(1.5, r[2] / 2452 * 120), st: r[3], top: r[4],
+        gr: this.tw(0), c: this.tw(this.col.base), al: this.tw(1) }));
+      this.cen = D.c.map((r) => ({ x: r[0] - mx, z: r[1] - mz }));
+      this.cenA = this.tw(0); this.topA = this.tw(0); this.gridA = this.tw(0);
+      // 바닥 껍질
+      const pts = this.p.map((q) => [q.x, q.z]).sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+      const cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+      const lo = [], up = [];
+      pts.forEach((q) => { while (lo.length >= 2 && cr(lo[lo.length - 2], lo[lo.length - 1], q) <= 0) lo.pop(); lo.push(q); });
+      pts.slice().reverse().forEach((q) => { while (up.length >= 2 && cr(up[up.length - 2], up[up.length - 1], q) <= 0) up.pop(); up.push(q); });
+      this.hull = lo.slice(0, -1).concat(up.slice(0, -1)).map(([x, z]) => [x * 1.07, z * 1.1]);
+      this.t0 = performance.now();
+    },
+    // 값 하나를 시간에 맞춰 옮기는 도우미
+    tw(v) { return { from: v, to: v, s: 0, d: 1 }; },
+    set(t, v, delay, dur, instant) {
+      const now = performance.now();
+      t.from = instant ? v : this.val(t, now); t.to = v; t.s = now + (instant ? -1e6 : delay || 0); t.d = dur || 900;
+    },
+    val(t, now) {
+      const k = Math.min(1, Math.max(0, (now - t.s) / t.d)), e = 1 - Math.pow(1 - k, 3);
+      if (Array.isArray(t.to)) return t.to.map((v, i) => t.from[i] + (v - t.from[i]) * e);
+      return t.from + (t.to - t.from) * e;
     },
     reset() {
-      this.ground.style.opacity = 0;
-      this.cen.forEach((c) => { c.style.opacity = 0; c.style.transition = 'opacity .6s'; });
-      this.pl.forEach((e) => { e.style.transform = 'scaleY(0)'; e.style.fill = C.g2; e.style.opacity = 1; e.style.transitionDelay = '0ms'; });
-      this.lbl.style.opacity = 0;
+      this.p.forEach((q) => { this.set(q.gr, 0, 0, 1, true); this.set(q.c, this.col.base, 0, 1, true); this.set(q.al, 1, 0, 1, true); });
+      [this.cenA, this.topA, this.gridA].forEach((t) => this.set(t, 0, 0, 1, true));
+      this.draw(performance.now());
     },
     step(sec, k, instant) {
-      const D = (ms) => (instant ? 0 : ms) + 'ms';
+      const I = instant;
       if (k === 1) {
-        this.ground.style.transition = 'opacity .6s'; this.ground.style.opacity = 1;
-        this.pl.forEach((e) => { e.style.transitionDelay = D((e._x - 500) * 0.9); e.style.transform = 'scaleY(1)'; });
+        this.set(this.gridA, 1, 0, 700, I);
+        this.p.forEach((q) => this.set(q.gr, 1, 150 + (q.x + 160) * 4.2 + Math.random() * 120, 1100, I));
       }
-      if (k === 2) this.pl.forEach((e) => {
-        e.style.transitionDelay = D(0);
-        if (e._st >= 1) e.style.fill = C.a2; else { e.style.fill = C.g3; e.style.opacity = 0.6; }
+      if (k === 2) this.p.forEach((q) => {
+        if (q.st >= 1) this.set(q.c, this.col.pass, 0, 700, I);
+        else { this.set(q.c, this.col.ghost, 0, 700, I); this.set(q.gr, 0.18, 0, 900, I); this.set(q.al, 0.7, 0, 700, I); }
       });
       if (k === 3) {
-        this.pl.forEach((e) => {
-          if (e._st === 1) { e.style.transitionDelay = D(0); e.style.fill = C.g2; }
-          if (e._st === 2) { e.style.transitionDelay = D(600); e.style.fill = C.g2; }
-          if (e._st === 3) { e.style.transitionDelay = D(600); e.style.fill = C.a1; }
+        this.p.forEach((q) => {
+          if (q.st === 1) { this.set(q.c, this.col.g, 0, 700, I); this.set(q.gr, 0.45, 0, 900, I); }
+          if (q.st === 2) { this.set(q.c, this.col.g, 500, 700, I); this.set(q.gr, 0.6, 500, 900, I); }
+          if (q.st === 3) this.set(q.c, this.col.a1, 500, 700, I);
         });
-        this.cen.forEach((c, i) => { c.style.transitionDelay = D(300 + i * 30); c.style.opacity = 1; });
+        this.set(this.cenA, 1, 200, 900, I);
       }
       if (k === 4) {
-        this.pl.forEach((e) => { if (e._st === 3) { e.style.transitionDelay = D(0); e.style.fill = e._top ? C.a : C.a1; } });
-        this.lbl.style.transitionDelay = D(400); this.lbl.style.opacity = 1;
+        this.p.forEach((q) => { if (q.top) this.set(q.c, this.col.a, 0, 600, I); });
+        this.set(this.topA, 1, 300, 900, I);
+      }
+    },
+    finish() { this.draw(performance.now()); },
+    enter() { this.run = true; const f = (now) => { if (!this.run) return; this.draw(now); requestAnimationFrame(f); }; requestAnimationFrame(f); },
+    leave() { this.run = false; },
+    proj(x, y, z, now) {
+      const yaw = -0.32 + Math.sin((now - this.t0) / 9000) * 0.16, pit = 0.62, S = 2.35;
+      const cy = Math.cos(yaw), sy = Math.sin(yaw);
+      const X = x * cy - z * sy, Z = x * sy + z * cy;
+      const depth = Z * Math.cos(pit) + y * Math.sin(pit);
+      const f = 1100 / (1100 - depth * 1.2);
+      return [this.W / 2 + 10 + X * S * f, 360 + (Z * Math.sin(pit) - y * Math.cos(pit)) * S * f, depth, Z];
+    },
+    draw(now) {
+      const g = this.g, W = this.W, H = this.H;
+      g.clearRect(0, 0, W, H);
+      const ga = this.val(this.gridA, now);
+      // 바닥과 격자
+      if (ga > 0) {
+        g.save(); g.globalAlpha = ga;
+        g.beginPath(); this.hull.forEach(([x, z], i) => { const [sx, sy] = this.proj(x, 0, z, now); i ? g.lineTo(sx, sy) : g.moveTo(sx, sy); }); g.closePath();
+        const grd = g.createLinearGradient(0, 150, 0, 560); grd.addColorStop(0, '#ECEEF2'); grd.addColorStop(1, '#E2E5EA');
+        g.fillStyle = grd; g.fill(); g.strokeStyle = '#C9CED5'; g.lineWidth = 1.5; g.stroke();
+        g.clip();
+        g.strokeStyle = 'rgba(255,255,255,.9)'; g.lineWidth = 1;
+        for (let v = -200; v <= 200; v += 20) {
+          g.beginPath(); let [a, b] = this.proj(v, 0, -160, now); g.moveTo(a, b); [a, b] = this.proj(v, 0, 160, now); g.lineTo(a, b); g.stroke();
+          g.beginPath(); [a, b] = this.proj(-200, 0, v, now); g.moveTo(a, b); [a, b] = this.proj(200, 0, v, now); g.lineTo(a, b); g.stroke();
+        }
+        g.restore();
+      }
+      // 체력인증센터와 2km 원 (2km는 18칸)
+      const ca = this.val(this.cenA, now);
+      if (ca > 0) {
+        g.save();
+        this.cen.forEach((c) => {
+          g.beginPath();
+          for (let i = 0; i <= 48; i++) { const t = i / 48 * Math.PI * 2; const [sx, sy] = this.proj(c.x + Math.cos(t) * 18 * ca, 0, c.z + Math.sin(t) * 18 * ca, now); i ? g.lineTo(sx, sy) : g.moveTo(sx, sy); }
+          g.fillStyle = `rgba(74,80,90,${0.06 * ca})`; g.fill();
+          g.strokeStyle = `rgba(74,80,90,${0.35 * ca})`; g.lineWidth = 1.2; g.setLineDash([4, 4]); g.stroke(); g.setLineDash([]);
+        });
+        g.restore();
+      }
+      // 센터 표시
+      if (ca > 0) this.cen.forEach((c) => {
+        const [sx, sy] = this.proj(c.x, 0, c.z, now);
+        g.beginPath(); g.ellipse(sx, sy, 6, 3.6, 0, 0, Math.PI * 2); g.fillStyle = `rgba(255,255,255,${ca})`; g.fill();
+        g.lineWidth = 2.5; g.strokeStyle = `rgba(74,80,90,${ca})`; g.stroke();
+      });
+      // 기둥: 먼 것부터
+      const w = 2.6;
+      const list = this.p.map((q) => ({ q, d: this.proj(q.x, 0, q.z, now)[2] })).sort((a, b) => a.d - b.d);
+      const yaw = -0.32 + Math.sin((now - this.t0) / 9000) * 0.16, cyw = Math.cos(yaw), syw = Math.sin(yaw);
+      const faces = [[1, 0], [-1, 0], [0, 1], [0, -1]].filter(([nx, nz]) => nx * syw + nz * cyw > 0);
+      list.forEach(({ q }) => {
+        const gr = this.val(q.gr, now); if (gr <= 0.002) return;
+        const h = q.h * gr, c = this.val(q.c, now), al = this.val(q.al, now), ww = q.top ? w * 1.7 : w;
+        const P = (dx, y, dz) => this.proj(q.x + dx * ww, y, q.z + dz * ww, now);
+        const sh = (m) => `rgba(${Math.round(c[0] * m)},${Math.round(c[1] * m)},${Math.round(c[2] * m)},${al})`;
+        faces.forEach(([nx, nz]) => {
+          const cs = nx ? [[nx, -1], [nx, 1]] : [[-1, nz], [1, nz]];
+          const a = P(cs[0][0], 0, cs[0][1]), b = P(cs[1][0], 0, cs[1][1]), bt = P(cs[1][0], h, cs[1][1]), at = P(cs[0][0], h, cs[0][1]);
+          g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.lineTo(bt[0], bt[1]); g.lineTo(at[0], at[1]); g.closePath();
+          g.fillStyle = sh(nx ? 0.78 : 0.9); g.fill();
+        });
+        const t = [P(-1, h, -1), P(1, h, -1), P(1, h, 1), P(-1, h, 1)];
+        g.beginPath(); t.forEach((v, i) => (i ? g.lineTo(v[0], v[1]) : g.moveTo(v[0], v[1]))); g.closePath();
+        g.fillStyle = sh(1.06); g.fill();
+      });
+      // 등촌제3동: 바닥 물결과 이름표
+      const ta = this.val(this.topA, now);
+      if (ta > 0) {
+        const q = this.p.find((v) => v.top);
+        const [bx, by] = this.proj(q.x, 0, q.z, now), [tx, ty] = this.proj(q.x, q.h, q.z, now);
+        for (let i = 0; i < 3; i++) {
+          const ph = ((now / 1800) + i / 3) % 1;
+          g.beginPath(); g.ellipse(bx, by, 10 + ph * 46, (10 + ph * 46) * 0.55, 0, 0, Math.PI * 2);
+          g.strokeStyle = `rgba(238,107,120,${(1 - ph) * 0.6 * ta})`; g.lineWidth = 2; g.stroke();
+        }
+        g.save(); g.globalAlpha = ta;
+        const lx = tx, ly = ty - 26;
+        g.strokeStyle = '#EE6B78'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(tx, ty - 4); g.lineTo(lx, ly); g.stroke();
+        g.font = '650 22px "Pretendard Variable", sans-serif'; const tw = g.measureText('등촌제3동').width + 32;
+        g.fillStyle = '#fff'; g.strokeStyle = '#EE6B78'; g.lineWidth = 2;
+        g.beginPath(); g.roundRect(lx - tw / 2, ly - 44, tw, 42, 10); g.fill(); g.stroke();
+        g.fillStyle = '#C8414F'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('등촌제3동', lx, ly - 23);
+        g.restore();
       }
     },
   };
