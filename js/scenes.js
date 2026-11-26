@@ -67,113 +67,31 @@
     return [112 + c * 62, 318 + r * 62];
   };
   S2.isA = (i) => i >= S2.n - S2.acc;
-  S.s2 = {
-    build() {
-      const sec = $('s2');
-      this.svg = DECK.svg(sec);
-      this.d = DECK.dots(this.svg, S2.n, 22);
-    },
-    reset() {
-      const rnd = DECK.rng(7);
-      this.d.forEach((c) => {
-        DECK.pos(c, 72 + rnd() * 1776, 410 + rnd() * 320);
-        DECK.fill(c, C.g2, 1);
-      });
-    },
-    start() {
-      const rnd = DECK.rng(11);
-      this.d.forEach((c, i) => {
-        const [x, y] = S2.xy(i);
-        DECK.pos(c, x, y, Math.floor(rnd() * 500));
-        DECK.fill(c, C.g1);
-      });
-    },
-    step(sec, k) {
-      if (k === 2) this.d.forEach((c, i) => { c.style.transitionDelay = '0ms'; DECK.fill(c, S2.isA(i) ? C.a : C.g2); });
-      if (k === 3) this.d.forEach((c, i) => { if (!S2.isA(i)) c.style.opacity = 0.3; });
-    },
-    finish() {
-      this.d.forEach((c, i) => { const [x, y] = S2.xy(i); DECK.pos(c, x, y); });
-    },
-  };
 
   /* ── 3장: 2장의 선홍 점이 부탁할 사람이 없는 쪽 막대로 쌓인다 ── */
-  S.s3 = {
-    build() {
-      this.svg = DECK.svg($('s3'));
-      this.d = DECK.dots(this.svg, S2.acc, 22);
-    },
-    reset() {
-      this.d.forEach((c, j) => {
-        const [x, y] = S2.xy(S2.n - S2.acc + j);
-        DECK.pos(c, x, y); DECK.fill(c, C.a, 1);
-      });
-    },
-    start() {
-      const rnd = DECK.rng(3);
-      this.d.forEach((c, j) => {
-        DECK.pos(c, 160 + (j % 5) * 50, 812 - Math.floor(j / 5) * 50, Math.floor(rnd() * 500));
-      });
-    },
-    step(sec, k) { if (k === 2) this.d.forEach((c) => { c.style.transitionDelay = '0ms'; c.style.opacity = 0; }); },
-    finish() { this.d.forEach((c) => { c.style.opacity = 0; }); },
-  };
 
   /* ── 6장: 계기 26건 점, 혼자 있는 점에 다른 점이 다가와 이어진다 ── */
   S.s6 = {
     build() {
       this.svg = DECK.svg($('s6'));
-      this.d = DECK.dots(this.svg, 26, 16);
+      this.d = DECK.dots(this.svg, 26, 12);
     },
     reset() {
       this.d.forEach((c, i) => {
-        DECK.pos(c, 128 + i * 36 + (i >= 11 ? 30 : 0) + (i >= 16 ? 30 : 0), 604);
-        DECK.fill(c, i < 11 ? C.a : i < 16 ? C.a2 : C.g2, 0);
+        DECK.pos(c, 118 + i * 30 + (i >= 11 ? 24 : 0) + (i >= 16 ? 24 : 0), 778);
+        DECK.fill(c, i < 11 ? C.a : i < 16 ? C.ink2 : C.g2, 0);
       });
     },
     step(sec, k, instant) {
-      if (k === 2) this.d.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : i * 45) + 'ms'; c.style.opacity = 1; });
+      if (k === 3) this.d.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : 400 + i * 45) + 'ms'; c.style.opacity = 1; });
     },
   };
 
   /* ── 7장: 영국 50명 가운데 43명 ── */
-  S.s7 = {
-    build() {
-      this.svg = DECK.svg($('s7'));
-      this.alone = DECK.dots(this.svg, 200, 11);   // 점 하나가 0.5%
-      this.uk = DECK.dots(this.svg, 50, 14);
-    },
-    reset() {
-      this.alone.forEach((c, i) => {
-        DECK.pos(c, 122 + (i % 20) * 31, 520 + Math.floor(i / 20) * 31);
-        DECK.fill(c, i >= 193 ? C.ink : C.g2, 0);
-      });
-      this.uk.forEach((c, i) => {
-        DECK.pos(c, 862 + (i % 25) * 31.5, 718 + Math.floor(i / 25) * 44);
-        DECK.fill(c, i < 43 ? C.a : C.g2, 0);
-      });
-    },
-    step(sec, k, instant) {
-      if (k === 1) this.alone.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : 300 + i * 4) + 'ms'; c.style.opacity = 1; });
-      if (k === 2) this.uk.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : 600 + i * 30) + 'ms'; c.style.opacity = 1; });
-    },
-  };
 
   /* ── 9장: 12주 띠와 세 시기 ── */
 
   /* ── 8장: 다시 측정한 사람 100명 가운데 2분 걷기가 늘어난 63% ── */
-  S.s8 = {
-    build() {
-      this.svg = DECK.svg($('s8'));
-      this.d = DECK.dots(this.svg, 200, 10);   // 다시 측정하러 온 사람 3.5%: 200개 가운데 7개
-    },
-    reset() {
-      this.d.forEach((c, i) => { DECK.pos(c, 1252 + (i % 20) * 28.6, 466 + Math.floor(i / 20) * 28); DECK.fill(c, i >= 193 ? C.a : C.g2, 0); });
-    },
-    step(sec, k, instant) {
-      if (k === 2) this.d.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : 200 + i * 5) + 'ms'; c.style.opacity = 1; });
-    },
-  };
 
   S.s9 = {
     build() {
@@ -508,8 +426,8 @@
       DECK.el(f, 'feGaussianBlur', { in: 'SourceGraphic', stdDeviation: 7, result: 'b' });
       DECK.el(f, 'feColorMatrix', { in: 'b', mode: 'matrix', values: '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9' });
       this.track = DECK.el(this.svg, 'line', { x1: 332, y1: 376, x2: 1588, y2: 376, stroke: C.g3, 'stroke-width': 4, 'stroke-linecap': 'round' });
-      this.prog = DECK.el(this.svg, 'line', { x1: 332, y1: 376, x2: 332, y2: 376, stroke: C.a, 'stroke-width': 4, 'stroke-linecap': 'round' });
-      this.marks = [332, 846, 1588].map((x) => DECK.el(this.svg, 'circle', { cx: x, cy: 376, r: 9, fill: '#fff', stroke: C.a, 'stroke-width': 3 }));
+      this.prog = DECK.el(this.svg, 'line', { x1: 332, y1: 376, x2: 332, y2: 376, stroke: C.g1, 'stroke-width': 4, 'stroke-linecap': 'round' });
+      this.marks = [332, 846, 1588].map((x) => DECK.el(this.svg, 'circle', { cx: x, cy: 376, r: 9, fill: '#fff', stroke: C.g1, 'stroke-width': 3 }));
       const g = DECK.el(this.svg, 'g', { filter: 'url(#goo-s16)' });
       this.p = [DECK.el(g, 'circle', { cx: 0, cy: 0, r: 15 }), DECK.el(g, 'circle', { cx: 0, cy: 0, r: 15 })];
       this.t = [];
@@ -519,7 +437,7 @@
       this.t.forEach(clearTimeout); this.t = [];
       [this.track, this.prog, ...this.marks].forEach((e) => { e.style.opacity = 0; });
       this.prog.setAttribute('x2', 332);
-      this.p.forEach((c) => { c.style.transition = ''; DECK.fill(c, C.a, 0); });
+      this.p.forEach((c) => { c.style.transition = ''; DECK.fill(c, C.ink2, 0); });
       this.at(332);
     },
     step(sec, k, instant) {

@@ -216,6 +216,6 @@
   };
   DECK.C = {
     a: '#EE6B78', a1: '#F39AA3', a2: '#F8C4C9', a3: '#FCE3E5',
-    ink: '#2B2F36', g1: '#9AA1AB', g2: '#C9CED5', g3: '#E3E6EA',
+    ink: '#2B2F36', ink2: '#4A505A', g1: '#9AA1AB', g2: '#C9CED5', g3: '#E3E6EA',
   };
 })();
