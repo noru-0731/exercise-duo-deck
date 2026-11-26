@@ -339,11 +339,15 @@ function render(t) {
   const en = eo(p(t, 56.2, 57.2));
   setOp($('end'), en, `translateY(${lerp(30, 0, en)}px)`);
 }
-window.render = render;
-window.DUR = 60;
+/* 명단이 올라가는 구간(원래 10.4~16.8초)을 2.4초로 줄이고 뒤를 당긴다 */
+const RS = 10.4, RO = 6.4, RN = 2.4;
+const warp = (T) => (T < RS ? T : T < RS + RN ? RS + (T - RS) * RO / RN : T + (RO - RN));
+const baseRender = render;
+window.render = (T) => baseRender(warp(T));
+window.DUR = 60 - (RO - RN);
 const q = new URLSearchParams(location.search);
-if (q.has('t')) render(+q.get('t'));
-else if (!q.has('cap')) { const t0 = performance.now(); const loop = () => { const t = ((performance.now() - t0) / 1000) % 60; render(t); requestAnimationFrame(loop); }; loop(); }
+if (q.has('t')) window.render(+q.get('t'));
+else if (!q.has('cap')) { const t0 = performance.now(); const loop = () => { const t = ((performance.now() - t0) / 1000) % window.DUR; window.render(t); requestAnimationFrame(loop); }; loop(); }
 </script>
 </body>
 </html>

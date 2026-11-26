@@ -354,9 +354,9 @@
       v.addEventListener('error', () => { this.ok = false; v.style.display = 'none'; });
       if (DEMO_VIDEO) { v.src = DEMO_VIDEO; } else { v.style.display = 'none'; }
       this.cards = [...document.querySelectorAll('#s15-steps .s15-c')];
-      /* 영상 시간에 맞춰 오른쪽 네 단계를 켠다: 1주 4초, 5주 18초, 9주 34초, 12주 48초 */
+      /* 영상 시간에 맞춰 오른쪽 네 단계를 켠다: 1주 4초, 5주 14초, 9주 30초, 12주 44초 */
       v.addEventListener('timeupdate', () => {
-        const c = v.currentTime; const k = c < 18 ? 1 : c < 34 ? 2 : c < 48 ? 3 : 4;
+        const c = v.currentTime; const k = c < 14 ? 1 : c < 30 ? 2 : c < 44 ? 3 : 4;
         if (c > 0.1) this.step(0, k);
       });
     },
@@ -368,7 +368,7 @@
         c.classList.toggle('done', n < k);
       });
     },
-    finish() { this.cards.forEach((c) => { c.classList.remove('cur', 'done'); }); if (this.ok) { try { this.v.currentTime = 52; } catch (e) { /* 영상 없음 */ } } },
+    finish() { this.cards.forEach((c) => { c.classList.remove('cur', 'done'); }); if (this.ok) { try { this.v.currentTime = 48; } catch (e) { /* 영상 없음 */ } } },
     enter(sec, playing) {
       if (!this.ok) return;
       try { this.v.currentTime = 0; if (playing) this.v.play(); } catch (e) { /* 영상 없음 */ }
