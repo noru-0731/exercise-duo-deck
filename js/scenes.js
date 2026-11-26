@@ -8,31 +8,8 @@
   const DEMO_VIDEO = 'media/demo.mp4';
 
 
-  /* ── 표지와 Q&A: 지도자 태블릿(13장 영상 1주 화면)이 아래에서 솟고, 알림 카드가 내려온다 ── */
-  function coverArt(id) {
-    return {
-      build() {
-        const sec = $(id);
-        const band = sec.querySelector('.band');
-        const box = document.createElement('div'); box.className = 'cv-box';
-        box.innerHTML = '<img class="cv-tab" src="media/cover_tab.png" alt="">'
-          + '<div class="cv-note"><div class="h"><i></i>도구가 먼저 알림</div><div class="m">황진호 님이 3주째 나오지 않음</div><div class="s">새 짝 후보: 황정수 님 · 걸어서 9분</div></div>';
-        if (band) sec.insertBefore(box, band); else sec.appendChild(box);
-        this.tab = box.querySelector('.cv-tab'); this.note = box.querySelector('.cv-note');
-        this.t = [];
-      },
-      reset() {
-        this.t.forEach(clearTimeout); this.t = [];
-        [this.tab, this.note].forEach((e) => { e.style.transition = 'none'; e.classList.remove('on'); void e.offsetWidth; e.style.transition = ''; });
-      },
-      step(sec, k, instant) {
-        if (k !== 1) return;
-        if (instant) { [this.tab, this.note].forEach((e) => { e.style.transition = 'none'; e.classList.add('on'); }); return; }
-        this.t.push(setTimeout(() => this.tab.classList.add('on'), 150));
-        this.t.push(setTimeout(() => this.note.classList.add('on'), 1100));
-      },
-    };
-  }
+  /* ── 표지와 Q&A: 그림 없이 글만 둔다 ── */
+  function coverArt() { return { build() {}, reset() {}, step() {} }; }
   S.s0 = coverArt('s0');
   S.sqa = coverArt('sqa');
 
