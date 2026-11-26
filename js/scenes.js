@@ -96,26 +96,27 @@
   S.s9 = {
     build() {
       const box = $('s9-weeks');
-      const x0 = 260, w = 122, gap = 10.6;
+      const x0 = 260, gap = 16, w = (1848 - x0 - gap * 2) / 3;
+      const seg = [
+        { wk: '1~4주', lead: 'background:var(--g1)', pair: 'var(--g3)', s: 1, d: 0 },
+        { wk: '5~8주', lead: 'background:repeating-linear-gradient(135deg,var(--g2) 0 10px,#fff 10px 20px);border:2px solid var(--g2)', pair: 'var(--g3)', s: 2, d: 0 },
+        { wk: '9~12주', lead: 'border:2px dashed var(--g1)', pair: 'var(--a)', s: 2, d: 500 },
+      ];
       let html = '';
-      for (let i = 0; i < 12; i++) {
+      seg.forEach((g, i) => {
         const x = x0 + i * (w + gap);
-        const s = i < 4 ? 1 : 2;
-        const d = i < 4 ? i * 120 : (i - 4) * 160;
-        const lead = i < 4 ? 'background:var(--g2)' : i < 8 ? 'background:repeating-linear-gradient(135deg,var(--g3) 0 10px,#fff 10px 20px);border:2px solid var(--g2)' : 'border:2px dashed var(--g1)';
-        const pair = i < 4 ? 'var(--a2)' : i < 8 ? 'var(--a1)' : 'var(--a)';
-        html += `<div class="ab mut" data-s="${s}" style="left:${x}px;top:290px;width:${w}px;text-align:center;font-size:19px;transition-delay:${d}ms">${i + 1}주</div>`;
-        html += `<div class="ab" data-s="${s}" style="left:${x}px;top:326px;width:${w}px;height:170px;border-radius:12px;${lead};transition-delay:${d}ms"></div>`;
-        html += `<div class="ab" data-s="${s}" style="left:${x}px;top:512px;width:${w}px;height:170px;border-radius:12px;background:${pair};transition-delay:${d + 80}ms"></div>`;
-      }
+        html += `<div class="ab mut" data-s="${g.s}" style="left:${x}px;top:296px;width:${w}px;font-size:19px;transition-delay:${g.d}ms">${g.wk}</div>`;
+        html += `<div class="ab" data-s="${g.s}" style="left:${x}px;top:330px;width:${w}px;height:96px;border-radius:12px;${g.lead};transition-delay:${g.d}ms"></div>`;
+        html += `<div class="ab" data-s="${g.s}" style="left:${x}px;top:442px;width:${w}px;height:96px;border-radius:12px;background:${g.pair};transition-delay:${g.d + 120}ms"></div>`;
+      });
       box.innerHTML = html;
       const ph = $('s9-phase');
-      ph.style.left = x0 + 'px'; ph.style.width = (1848 - x0) + 'px';
-      const card = (s, d, t, b, a) => `<div class="card${a ? ' tint' : ''}" data-s="${s}" style="position:relative;flex:1;height:170px;transition-delay:${d}ms;${a ? 'border-color:var(--a2)' : ''}"><div style="font-size:22px;font-weight:600;color:${a ? 'var(--at)' : 'var(--mut)'}">${t}</div><div style="font-size:28px;font-weight:600;color:${a ? 'var(--at)' : 'var(--ink)'};margin-top:10px;line-height:1.4">${b}</div></div>`;
+      ph.style.left = x0 + 'px'; ph.style.width = (1848 - x0) + 'px'; ph.style.gap = gap + 'px';
+      const txt = (s, d, t, b) => `<div data-s="${s}" style="flex:1;transition-delay:${d}ms"><div style="font-size:22px;color:var(--mut)">${t}</div><div style="font-size:28px;font-weight:600;color:var(--ink);margin-top:10px;line-height:1.45">${b}</div></div>`;
       ph.innerHTML =
-        card(1, 0, '1~4주', '지도자가 집으로 찾아가 데리고 나온다. 매번 같이 한다', false) +
-        card(2, 200, '5~8주', '지도자는 한 번씩 빠진다. 빠진 날은 짝끼리 한다', false) +
-        card(2, 800, '9~12주', '짝끼리 한다. 12주에 다시 측정한다', true);
+        txt(1, 0, '1~4주', '지도자가 집으로 찾아가<br>데리고 나온다. 매번 같이 한다') +
+        txt(2, 0, '5~8주', '지도자는 한 번씩 빠진다.<br>빠진 날은 짝끼리 한다') +
+        txt(2, 500, '9~12주', '짝끼리 한다.<br>12주에 다시 측정한다');
     },
   };
 
@@ -178,8 +179,8 @@
       for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) out.push([cx0 + c * gx, cy0 + r * gy]);
       return out;
     };
-    S11.small = { centers: pairs(166, 722, 5, 1, 128, 0), good: new Set([2]) };
-    S11.big = { centers: pairs(960, 572, 5, 4, 190, 88), good: new Set([0, 2, 3, 5, 7, 8, 10, 12, 14, 16, 19]) };
+    S11.small = { centers: pairs(142, 700, 5, 1, 116, 0), good: new Set([2]) };
+    S11.big = { centers: pairs(900, 560, 5, 4, 200, 88), good: new Set([0, 2, 3, 5, 7, 8, 10, 12, 14, 16, 19]) };
     S11.big.pts = [];
     S11.big.centers.forEach(([x, y]) => { S11.big.pts.push([x - 30, y]); S11.big.pts.push([x + 30, y]); });
   })();
@@ -193,7 +194,7 @@
       const gGray = DECK.el(this.svg, 'g', {}), gGood = DECK.el(this.svg, 'g', { filter: 'url(#goo-s11)' });
       this.sets = [S11.small, S11.big].map((S, si) => S.centers.map(([x, y], k) => {
         const good = S.good.has(k), g = good ? gGood : gGray;
-        const r = (good ? 23 : 20) * (si === 0 ? 1.15 : 1);
+        const r = good ? 23 : 20;
         return { x, y, good, si, a: DECK.el(g, 'circle', { cx: 0, cy: 0, r }), b: DECK.el(g, 'circle', { cx: 0, cy: 0, r }) };
       }));
       this.t = [];
@@ -201,14 +202,14 @@
     place(p, gap) { DECK.pos(p.a, p.x - gap, p.y); DECK.pos(p.b, p.x + gap, p.y); },
     reset() {
       this.t.forEach(clearTimeout); this.t = [];
-      this.sets.flat().forEach((p) => { this.place(p, (p.good ? 32 : 25) * (p.si === 0 ? 1.15 : 1)); [p.a, p.b].forEach((c) => DECK.fill(c, p.good ? C.a : C.g2, 0)); });
+      this.sets.flat().forEach((p) => { this.place(p, p.good ? 32 : 25); [p.a, p.b].forEach((c) => DECK.fill(c, p.good ? (p.si === 0 ? C.ink2 : C.a) : C.g2, 0)); });
     },
     step(sec, k, instant) {
       const si = k - 1; if (si > 1) return;
       this.sets[si].forEach((p, n) => {
         [p.a, p.b].forEach((c) => { c.style.transitionDelay = (instant ? 0 : n * 30) + 'ms'; c.style.opacity = 1; });
         if (!p.good) return;
-        const jg = 22 * (p.si === 0 ? 1.15 : 1);
+        const jg = 22;
         if (instant) { this.place(p, jg); return; }
         this.t.push(setTimeout(() => this.place(p, jg), 800 + n * 60));
       });
@@ -246,7 +247,7 @@
     step(sec, k, instant) {
       const D = (ms) => (instant ? 0 : ms);
       if (k === 2) this.pairs.forEach((_, n) => {
-        const go = () => { const [a, b] = this.at(n, 20); DECK.pos(this.d[2 * n], a[0], a[1]); DECK.pos(this.d[2 * n + 1], b[0], b[1]); DECK.fill(this.d[2 * n], C.a); DECK.fill(this.d[2 * n + 1], C.a); };
+        const go = () => { const [a, b] = this.at(n, 20); DECK.pos(this.d[2 * n], a[0], a[1]); DECK.pos(this.d[2 * n + 1], b[0], b[1]); DECK.fill(this.d[2 * n], C.ink2); DECK.fill(this.d[2 * n + 1], C.ink2); };
         if (instant) go(); else this.t.push(setTimeout(go, 600 + n * 160));
       });
       if (k === 3) {
@@ -254,7 +255,7 @@
         const go = () => {
           const out = this.d[7], left = this.d[6], lone = this.d[16];
           DECK.fill(out, C.g2); DECK.pos(out, this.pairs[3][0] + 40, this.pairs[3][1] - 10);
-          DECK.pos(left, this.lone[0] - 20, this.lone[1]); DECK.pos(lone, this.lone[0] + 20, this.lone[1]); DECK.fill(lone, C.a);
+          DECK.pos(left, this.lone[0] - 20, this.lone[1]); DECK.pos(lone, this.lone[0] + 20, this.lone[1]); DECK.fill(lone, C.a); DECK.fill(left, C.a);
         };
         if (instant) go(); else this.t.push(setTimeout(go, D(500)));
       }
@@ -274,7 +275,7 @@
       const mx = D.d.reduce((a, r) => a + r[0], 0) / D.d.length, mz = D.d.reduce((a, r) => a + r[1], 0) / D.d.length;
       this.mx = mx; this.mz = mz;
       const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
-      this.col = { base: hex('#C9CED5'), ghost: hex('#E3E6EA'), pass: hex('#F8C4C9'), g: hex('#AEB5BF'), a1: hex('#F39AA3'), a: hex('#EE6B78') };
+      this.col = { base: hex('#C9CED5'), ghost: hex('#E3E6EA'), pass: hex('#AEB5BF'), g: hex('#AEB5BF'), a1: hex('#6B7280'), a: hex('#EE6B78') };
       this.p = D.d.map((r) => ({ x: r[0] - mx, z: r[1] - mz, h: Math.max(1.5, r[2] / 2452 * 120), st: r[3], top: r[4],
         gr: this.tw(0), c: this.tw(this.col.base), al: this.tw(1) }));
       this.cen = D.c.map((r) => ({ x: r[0] - mx, z: r[1] - mz }));
