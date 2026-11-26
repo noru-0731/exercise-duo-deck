@@ -8,52 +8,28 @@
   const DEMO_VIDEO = 'media/demo.mp4';
 
 
-  /* ── 표지와 Q&A: 흩어진 사람 가운데 짝이 맺어진다 ── */
+  /* ── 표지와 Q&A: 지도자 태블릿(13장 영상 1주 화면)이 아래에서 솟고, 알림 카드가 내려온다 ── */
   function coverArt(id) {
     return {
       build() {
         const sec = $(id);
-        this.svg = DECK.svg(sec);
-        const NSv = 'http://www.w3.org/2000/svg';
-        // 물방울처럼 붙게 하는 필터: 흐리게 한 뒤 가장자리를 다시 또렷하게
-        const defs = DECK.el(this.svg, 'defs', {});
-        const f = DECK.el(defs, 'filter', { id: 'goo-' + id, x: 0, y: 0, width: 1920, height: 1080, filterUnits: 'userSpaceOnUse' });
-        DECK.el(f, 'feGaussianBlur', { in: 'SourceGraphic', stdDeviation: 9, result: 'b' });
-        DECK.el(f, 'feColorMatrix', { in: 'b', mode: 'matrix', values: '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9' });
-        const cols = 11, rows = 10, x0 = 922, y0 = 120, gx = 86, gy = 86;
-        this.pts = [];
-        for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) this.pts.push([x0 + c * gx + (r % 2) * 43, y0 + r * gy]);
-        const P = (r, c) => r * cols + c;
-        const Q = (r, c) => P(r, c + 3);   // 처음 짠 8칸 기준 짝을 오른쪽에 그대로 둔다
-        this.pairs = [[Q(0, 2), Q(0, 3)], [Q(0, 6), Q(1, 6)], [Q(1, 4), Q(2, 4)], [Q(2, 0), Q(2, 1)], [Q(3, 3), Q(3, 4)], [Q(4, 6), Q(5, 6)],
-          [Q(5, 1), Q(5, 2)], [Q(6, 4), Q(6, 5)], [Q(7, 0), Q(8, 0)], [Q(7, 6), Q(7, 7)], [Q(8, 3), Q(8, 4)], [Q(9, 1), Q(9, 2)],
-          [P(1, 0), P(1, 1)], [P(3, 1), P(4, 1)], [P(6, 0), P(6, 1)], [P(8, 1), P(9, 0)]];
-        this.mate = new Map();
-        this.pairs.forEach(([a, b]) => { this.mate.set(a, b); this.mate.set(b, a); });
-        const gGray = DECK.el(this.svg, 'g', {});
-        const gPair = DECK.el(this.svg, 'g', { filter: 'url(#goo-' + id + ')' });
-        this.d = this.pts.map((p, i) => DECK.el(this.mate.has(i) ? gPair : gGray, 'circle', { cx: 0, cy: 0, r: this.mate.has(i) ? 21 : 17 }));
+        const band = sec.querySelector('.band');
+        const box = document.createElement('div'); box.className = 'cv-box';
+        box.innerHTML = '<img class="cv-tab" src="media/cover_tab.png" alt="">'
+          + '<div class="cv-note"><div class="h"><i></i>도구가 먼저 알림</div><div class="m">황진호 님이 3주째 나오지 않음</div><div class="s">새 짝 후보: 황정수 님 · 걸어서 9분</div></div>';
+        if (band) sec.insertBefore(box, band); else sec.appendChild(box);
+        this.tab = box.querySelector('.cv-tab'); this.note = box.querySelector('.cv-note');
         this.t = [];
       },
-      home() { this.d.forEach((c, i) => DECK.pos(c, this.pts[i][0], this.pts[i][1])); },
       reset() {
         this.t.forEach(clearTimeout); this.t = [];
-        this.home();
-        this.d.forEach((c, i) => DECK.fill(c, this.mate.has(i) ? C.a : C.g3, 0));
-      },
-      // 짝인 두 점이 가운데로 다가가 맞붙는다
-      join(i) {
-        const j = this.mate.get(i), [x1, y1] = this.pts[i], [x2, y2] = this.pts[j];
-        const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, dx = x1 - mx, dy = y1 - my, L = Math.hypot(dx, dy) || 1;
-        DECK.pos(this.d[i], mx + dx / L * 24, my + dy / L * 24);
+        [this.tab, this.note].forEach((e) => { e.style.transition = 'none'; e.classList.remove('on'); void e.offsetWidth; e.style.transition = ''; });
       },
       step(sec, k, instant) {
         if (k !== 1) return;
-        this.d.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : i * 6) + 'ms'; c.style.opacity = 1; });
-        this.pairs.forEach(([a, b], n) => {
-          if (instant) { this.join(a); this.join(b); return; }
-          this.t.push(setTimeout(() => { this.join(a); this.join(b); }, 400 + n * 80));
-        });
+        if (instant) { [this.tab, this.note].forEach((e) => { e.style.transition = 'none'; e.classList.add('on'); }); return; }
+        this.t.push(setTimeout(() => this.tab.classList.add('on'), 150));
+        this.t.push(setTimeout(() => this.note.classList.add('on'), 1100));
       },
     };
   }

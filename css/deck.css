@@ -281,3 +281,19 @@ svg line, svg path { transition: stroke .8s var(--ease), stroke-width .8s var(--
 .card.kc { justify-content: flex-start; }
 .card.kc .kc-ar { margin-top: auto; margin-bottom: 22px; }
 .card.kc .kc-d { padding-bottom: 26px; border-bottom: 1.5px solid var(--line); }
+
+/* 표지·Q&A 태블릿 */
+.cv-box { position: absolute; left: 1010px; top: 150px; width: 820px; height: 800px; perspective: 2200px; pointer-events: none; }
+.cv-tab { position: absolute; left: 40px; top: 30px; width: 760px; height: auto; transform-origin: 50% 100%;
+  transform: translateY(260px) rotateX(24deg) rotateY(-14deg) scale(.9); opacity: 0; filter: drop-shadow(0 40px 50px rgba(31,35,40,.22));
+  transition: transform 1.3s cubic-bezier(.2,.8,.2,1), opacity .8s ease; }
+.cv-tab.on { transform: translateY(0) rotateX(6deg) rotateY(-14deg) rotateZ(-1.5deg) scale(1); opacity: 1; }
+.cv-note { position: absolute; left: -40px; top: 520px; width: 520px; background: rgba(255,255,255,.97); border-radius: 22px; border: 1.5px solid var(--line);
+  box-shadow: 0 24px 50px rgba(31,35,40,.18); padding: 22px 26px; opacity: 0; transform: translateY(-40px);
+  transition: transform .7s cubic-bezier(.3,1.4,.5,1), opacity .5s ease; }
+.cv-note.on { opacity: 1; transform: translateY(0); }
+.cv-note .h { display: flex; align-items: center; gap: 12px; font-size: 19px; font-weight: 700; color: var(--at); }
+.cv-note .h i { width: 28px; height: 28px; border-radius: 50%; background: var(--a); position: relative; }
+.cv-note .h i:after { content: '!'; position: absolute; inset: 0; color: #fff; font-style: normal; font-weight: 800; text-align: center; line-height: 28px; font-size: 18px; }
+.cv-note .m { font-size: 28px; font-weight: 750; margin-top: 10px; color: var(--ink); }
+.cv-note .s { font-size: 22px; color: var(--ink2); margin-top: 6px; }
