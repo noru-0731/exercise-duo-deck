@@ -70,55 +70,11 @@
 
   /* ── 3장: 2장의 선홍 점이 부탁할 사람이 없는 쪽 막대로 쌓인다 ── */
 
-  /* ── 6장: 계기 26건 점, 혼자 있는 점에 다른 점이 다가와 이어진다 ── */
-  S.s6 = {
-    build() {
-      this.svg = DECK.svg($('s6'));
-      this.d = DECK.dots(this.svg, 26, 12);
-    },
-    reset() {
-      this.d.forEach((c, i) => {
-        DECK.pos(c, 118 + i * 30 + (i >= 11 ? 24 : 0) + (i >= 16 ? 24 : 0), 778);
-        DECK.fill(c, i < 11 ? C.a : i < 16 ? C.ink2 : C.g2, 0);
-      });
-    },
-    step(sec, k, instant) {
-      if (k === 3) this.d.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : 400 + i * 45) + 'ms'; c.style.opacity = 1; });
-    },
-  };
-
   /* ── 7장: 영국 50명 가운데 43명 ── */
 
   /* ── 9장: 12주 띠와 세 시기 ── */
 
   /* ── 8장: 다시 측정한 사람 100명 가운데 2분 걷기가 늘어난 63% ── */
-
-  S.s9 = {
-    build() {
-      const box = $('s9-weeks');
-      const x0 = 260, gap = 16, w = (1848 - x0 - gap * 2) / 3;
-      const seg = [
-        { wk: '1~4주', lead: 'background:var(--g1)', pair: 'var(--g3)', s: 1, d: 0 },
-        { wk: '5~8주', lead: 'background:repeating-linear-gradient(135deg,var(--g2) 0 10px,#fff 10px 20px);border:2px solid var(--g2)', pair: 'var(--g3)', s: 2, d: 0 },
-        { wk: '9~12주', lead: 'border:2px dashed var(--g1)', pair: 'var(--a)', s: 2, d: 500 },
-      ];
-      let html = '';
-      seg.forEach((g, i) => {
-        const x = x0 + i * (w + gap);
-        html += `<div class="ab mut" data-s="${g.s}" style="left:${x}px;top:296px;width:${w}px;font-size:19px;transition-delay:${g.d}ms">${g.wk}</div>`;
-        html += `<div class="ab" data-s="${g.s}" style="left:${x}px;top:330px;width:${w}px;height:96px;border-radius:12px;${g.lead};transition-delay:${g.d}ms"></div>`;
-        html += `<div class="ab" data-s="${g.s}" style="left:${x}px;top:442px;width:${w}px;height:96px;border-radius:12px;background:${g.pair};transition-delay:${g.d + 120}ms"></div>`;
-      });
-      box.innerHTML = html;
-      const ph = $('s9-phase');
-      ph.style.left = x0 + 'px'; ph.style.width = (1848 - x0) + 'px'; ph.style.gap = gap + 'px';
-      const txt = (s, d, t, b) => `<div data-s="${s}" style="flex:1;transition-delay:${d}ms"><div style="font-size:22px;color:var(--mut)">${t}</div><div style="font-size:28px;font-weight:600;color:var(--ink);margin-top:10px;line-height:1.45">${b}</div></div>`;
-      ph.innerHTML =
-        txt(1, 0, '1~4주', '지도자가 집으로 찾아가<br>데리고 나온다. 매번 같이 한다') +
-        txt(2, 0, '5~8주', '지도자가 한 번씩 쉰다.<br>쉬는 날은 짝끼리 한다') +
-        txt(2, 500, '9~12주', '짝끼리 한다.<br>12주에 다시 측정한다');
-    },
-  };
 
   /* ── 10장: 점 20개를 아무렇게나, 그다음 비슷한 사람끼리 잇는다 ── */
   const S10 = { n: 20, y: 500, yA: 500, yB: 690 };
@@ -170,104 +126,12 @@
     finish() { this.d.forEach((c, i) => DECK.pos(c, S10.x[i], S10.yA)); },
   };
 
-  /* ── 11장: 점이 열, 스물, 마흔의 세 무리가 된다 ── */
-  /* 11장: 후보가 적을 때(10명)와 동 전체로 모을 때(40명). 맞는 짝은 물방울처럼 붙는다 */
-  const S11 = {};
-  (function () {
-    const pairs = (cx0, cy0, cols, rows, gx, gy) => {
-      const out = [];
-      for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) out.push([cx0 + c * gx, cy0 + r * gy]);
-      return out;
-    };
-    S11.small = { centers: pairs(142, 700, 5, 1, 116, 0), good: new Set([2]) };
-    S11.big = { centers: pairs(900, 560, 5, 4, 200, 88), good: new Set([0, 2, 3, 5, 7, 8, 10, 12, 14, 16, 19]) };
-    S11.big.pts = [];
-    S11.big.centers.forEach(([x, y]) => { S11.big.pts.push([x - 30, y]); S11.big.pts.push([x + 30, y]); });
-  })();
-  S.s11 = {
-    build() {
-      this.svg = DECK.svg($('s11'));
-      const defs = DECK.el(this.svg, 'defs', {});
-      const f = DECK.el(defs, 'filter', { id: 'goo-s11', x: 0, y: 0, width: 1920, height: 1080, filterUnits: 'userSpaceOnUse' });
-      DECK.el(f, 'feGaussianBlur', { in: 'SourceGraphic', stdDeviation: 9, result: 'b' });
-      DECK.el(f, 'feColorMatrix', { in: 'b', mode: 'matrix', values: '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9' });
-      const gGray = DECK.el(this.svg, 'g', {}), gGood = DECK.el(this.svg, 'g', { filter: 'url(#goo-s11)' });
-      this.sets = [S11.small, S11.big].map((S, si) => S.centers.map(([x, y], k) => {
-        const good = S.good.has(k), g = good ? gGood : gGray;
-        const r = good ? 23 : 20;
-        return { x, y, good, si, a: DECK.el(g, 'circle', { cx: 0, cy: 0, r }), b: DECK.el(g, 'circle', { cx: 0, cy: 0, r }) };
-      }));
-      this.t = [];
-    },
-    place(p, gap) { DECK.pos(p.a, p.x - gap, p.y); DECK.pos(p.b, p.x + gap, p.y); },
-    reset() {
-      this.t.forEach(clearTimeout); this.t = [];
-      this.sets.flat().forEach((p) => { this.place(p, p.good ? 32 : 25); [p.a, p.b].forEach((c) => DECK.fill(c, p.good ? (p.si === 0 ? C.ink2 : C.a) : C.g2, 0)); });
-    },
-    step(sec, k, instant) {
-      const si = k - 1; if (si > 1) return;
-      this.sets[si].forEach((p, n) => {
-        [p.a, p.b].forEach((c) => { c.style.transitionDelay = (instant ? 0 : n * 30) + 'ms'; c.style.opacity = 1; });
-        if (!p.good) return;
-        const jg = 22;
-        if (instant) { this.place(p, jg); return; }
-        this.t.push(setTimeout(() => this.place(p, jg), 800 + n * 60));
-      });
-    },
-  };
-
-  /* ── 12장: 마흔 점이 가운데 칸으로 들어간다 ── */
-  S.s12 = {
-    build() {
-      this.svg = DECK.svg($('s12'));
-      const defs = DECK.el(this.svg, 'defs', {});
-      const f = DECK.el(defs, 'filter', { id: 'goo-s12', x: 0, y: 0, width: 1920, height: 1080, filterUnits: 'userSpaceOnUse' });
-      DECK.el(f, 'feGaussianBlur', { in: 'SourceGraphic', stdDeviation: 8, result: 'b' });
-      DECK.el(f, 'feColorMatrix', { in: 'b', mode: 'matrix', values: '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9' });
-      const g = DECK.el(this.svg, 'g', { filter: 'url(#goo-s12)' });
-      // 계산 칸 안의 짝 자리 8쌍과 혼자인 한 사람
-      this.pairs = [];
-      for (let r = 0; r < 2; r++) for (let c = 0; c < 4; c++) this.pairs.push([770 + c * 128, 440 + r * 82]);
-      this.lone = [960, 620];
-      this.d = []; for (let i = 0; i < 17; i++) this.d.push(DECK.el(g, 'circle', { cx: 0, cy: 0, r: 17 }));
-      this.t = [];
-    },
-    at(k, gap) { const [x, y] = this.pairs[k]; return [[x - gap, y], [x + gap, y]]; },
-    reset() {
-      this.t.forEach(clearTimeout); this.t = [];
-      this.d.forEach((c, i) => { const p = S11.big.pts[i] || S11.big.pts[0]; DECK.pos(c, p[0], p[1]); DECK.fill(c, C.a, 1); });
-    },
-    start() {
-      // 11장의 점들이 계산 칸으로 들어와 흩어져 선다
-      this.d.forEach((c, i) => {
-        const [x, y] = i < 16 ? this.at(Math.floor(i / 2), 32)[i % 2] : this.lone;
-        DECK.pos(c, x, y, i * 30); DECK.fill(c, C.g1, 1);
-      });
-    },
-    step(sec, k, instant) {
-      const D = (ms) => (instant ? 0 : ms);
-      if (k === 2) this.pairs.forEach((_, n) => {
-        const go = () => { const [a, b] = this.at(n, 20); DECK.pos(this.d[2 * n], a[0], a[1]); DECK.pos(this.d[2 * n + 1], b[0], b[1]); DECK.fill(this.d[2 * n], C.ink2); DECK.fill(this.d[2 * n + 1], C.ink2); };
-        if (instant) go(); else this.t.push(setTimeout(go, 600 + n * 160));
-      });
-      if (k === 3) {
-        // 짝 하나가 끊기면 혼자 된 사람이 혼자였던 사람과 다시 맺어진다
-        const go = () => {
-          const out = this.d[7], left = this.d[6], lone = this.d[16];
-          DECK.fill(out, C.g2); DECK.pos(out, this.pairs[3][0] + 40, this.pairs[3][1] - 10);
-          DECK.pos(left, this.lone[0] - 20, this.lone[1]); DECK.pos(lone, this.lone[0] + 20, this.lone[1]); DECK.fill(lone, C.a); DECK.fill(left, C.a);
-        };
-        if (instant) go(); else this.t.push(setTimeout(go, D(500)));
-      }
-    },
-  };
-
   /* ── 13장: 흐린 점이 칸마다 진해진다 ── */
   S.s13 = {};
 
   /* ── 14장: 동 427개를 세 기준으로 거른다 ── */
   /* 14장: 서울 427개 동을 입체 기둥으로. 높이는 혼자 사는 수급 노인 수. 시점이 천천히 돈다 */
-  S.s14 = {
+  S.ap8 = {
     build() {
       const D = window.S14DATA;
       this.cv = $('s14-cv'); this.g = this.cv.getContext('2d');
@@ -301,11 +165,22 @@
       return t.from + (t.to - t.from) * e;
     },
     reset() {
+      clearTimeout(this.tm1); clearTimeout(this.tm2); clearTimeout(this.tm3);
       this.p.forEach((q) => { this.set(q.gr, 0, 0, 1, true); this.set(q.c, this.col.base, 0, 1, true); this.set(q.al, 1, 0, 1, true); });
       [this.cenA, this.topA, this.gridA].forEach((t) => this.set(t, 0, 0, 1, true));
       this.draw(performance.now());
     },
+    // 부록 장은 차례가 하나라서, 그 한 차례에 거르는 네 단계를 차례로 돌린다
     step(sec, k, instant) {
+      if (k !== 1) return;
+      clearTimeout(this.tm1); clearTimeout(this.tm2); clearTimeout(this.tm3);
+      this.stage(1, instant);
+      if (instant) { this.stage(2, true); this.stage(3, true); this.stage(4, true); return; }
+      this.tm1 = setTimeout(() => this.stage(2, false), 1100);
+      this.tm2 = setTimeout(() => this.stage(3, false), 2000);
+      this.tm3 = setTimeout(() => this.stage(4, false), 3000);
+    },
+    stage(k, instant) {
       const I = instant;
       if (k === 1) {
         this.set(this.gridA, 1, 0, 700, I);

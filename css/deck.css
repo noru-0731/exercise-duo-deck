@@ -224,3 +224,31 @@ svg line, svg path { transition: stroke .8s var(--ease), stroke-width .8s var(--
 .tbl.dat th { padding-bottom: 14px; }
 .tbl.dat tr:first-child { height: 48px; }
 .tbl.wt td { padding-top: 16px; padding-bottom: 16px; }
+
+/* 2026-11-26 장별 지시서 */
+.card.kc { display: flex; flex-direction: column; justify-content: space-between; padding: 34px 36px; }
+.kc-d > div { font-size: 22px; color: var(--mut); line-height: 1.7; }
+.kc-d .kc-n { font-weight: 650; color: var(--ink2); }
+.kc-ar { font-size: 52px; color: var(--g2); line-height: 1; }
+.kc-v { height: 92px; display: flex; align-items: flex-end; margin-top: 10px; }
+.kc-t { font-size: 28px; font-weight: 550; line-height: 1.4; color: var(--ink); margin-top: 18px; }
+.tb { display: flex; border-radius: 10px; overflow: hidden; }
+.tb > div { display: flex; align-items: center; padding: 0 18px; font-size: 19px; font-weight: 600; color: var(--ink2); white-space: nowrap; }
+.qv-t { font-size: 28px; line-height: 1.5; }
+.qv-c { font-size: 22px; color: var(--mut); margin-top: 10px; }
+.s7-b { top: 404px; width: 500px; border-top: 3px solid var(--g3); padding-top: 26px; }
+.s7-t { font-size: 28px; font-weight: 650; color: var(--ink); }
+.s7-v { height: 96px; display: flex; align-items: flex-end; margin-top: 40px; }
+.s7-s { font-size: 22px; color: var(--mut); margin-top: 28px; }
+.s7-ar { top: 526px; width: 138px; text-align: center; font-size: 52px; color: var(--g1); }
+.card.tc { display: flex; flex-direction: column; padding: 32px 34px; }
+.tc-h { font-size: 28px; font-weight: 700; color: var(--ink); padding-bottom: 18px; border-bottom: 1.5px solid var(--g2); }
+.tc-l { flex: 1; display: flex; flex-direction: column; justify-content: space-evenly; }
+.tc-l > div { font-size: 28px; line-height: 1.45; color: var(--ink); padding: 16px 0; border-bottom: 1px solid var(--line); }
+.tc-l > div:last-child { border-bottom: 0; }
+.chips.c5 .chip { margin-right: 26px; padding: 16px 12px; }
+.chips.c5 .chip:not(:last-child)::after { right: -19px; }
+.chips.c5 .chip .n { line-height: 1.25; }
+.tbl.d8 td, .tbl.d8 th { padding: 6px 14px; }
+.tbl.d8 tr.d8-top td { color: var(--at); font-weight: 650; }
+.chips.c5 .chip:last-child { margin-right: 0; }
