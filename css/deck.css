@@ -238,9 +238,9 @@ svg line, svg path { transition: stroke .8s var(--ease), stroke-width .8s var(--
 .qv-c { font-size: 22px; color: var(--mut); margin-top: 10px; }
 .s7-b { top: 404px; width: 500px; border-top: 3px solid var(--g3); padding-top: 26px; }
 .s7-t { font-size: 28px; font-weight: 650; color: var(--ink); }
-.s7-v { height: 96px; display: flex; align-items: flex-end; margin-top: 40px; }
-.s7-s { font-size: 22px; color: var(--mut); margin-top: 28px; }
-.s7-ar { top: 526px; width: 138px; text-align: center; font-size: 52px; color: var(--g1); }
+.s7-v { height: 96px; display: flex; align-items: flex-end; margin-top: 30px; }
+.s7-s { font-size: 22px; color: var(--mut); margin-top: 20px; }
+.s7-ar { top: 410px; width: 60px; text-align: center; font-size: 52px; color: var(--g1); }
 .card.tc { display: flex; flex-direction: column; padding: 32px 34px; }
 .tc-h { font-size: 28px; font-weight: 700; color: var(--ink); padding-bottom: 18px; border-bottom: 1.5px solid var(--g2); }
 .tc-l { flex: 1; display: flex; flex-direction: column; justify-content: space-evenly; }
@@ -252,3 +252,18 @@ svg line, svg path { transition: stroke .8s var(--ease), stroke-width .8s var(--
 .tbl.d8 td, .tbl.d8 th { padding: 6px 14px; }
 .tbl.d8 tr.d8-top td { color: var(--at); font-weight: 650; }
 .chips.c5 .chip:last-child { margin-right: 0; }
+
+/* 2026-11-26 판 나누기 */
+.pn { position: absolute; background: var(--g4); border-radius: 20px; }
+.card.kc, .card.pnc { background: var(--g4); border-color: var(--g4); }
+.card.kc .kc-ar { color: var(--g1); }
+.card.pnc .tc-l > div { border-bottom-color: var(--g2); }
+.pn.qc { display: flex; align-items: center; gap: 18px; padding: 0 40px 0 30px; }
+.qc-m { flex: none; align-self: flex-start; margin-top: 40px; font-size: 80px; line-height: .6; font-weight: 800; color: var(--g2); }
+.pn.qc .qv-t { font-size: 28px; line-height: 1.5; color: var(--ink); }
+.r5h { font-size: 19px; color: var(--mut); width: 160px; }
+.r5 { font-size: 28px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.r5tag { padding: 8px 16px; border-radius: 10px; background: #fff; border: 1.5px solid var(--g2); font-size: 22px; font-weight: 650; color: var(--ink2); }
+.b7-l { font-size: 19px; color: var(--mut); margin-bottom: 8px; }
+.b7 { height: 150px; border-radius: 10px; overflow: hidden; }
+.b7-n { font-size: 22px; color: var(--ink); margin-top: 12px; }
