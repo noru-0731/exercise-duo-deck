@@ -307,9 +307,9 @@
       v.addEventListener('error', () => { this.ok = false; v.style.display = 'none'; });
       if (DEMO_VIDEO) { v.src = DEMO_VIDEO; } else { v.style.display = 'none'; }
       this.cards = [...document.querySelectorAll('#s15-steps .s15-c')];
-      /* 영상 시간에 맞춰 오른쪽 네 단계를 켠다: 1주 4초, 5주 14초, 9주 30초, 12주 44초 */
+      /* 영상 시간에 맞춰 오른쪽 네 단계를 켠다: 1주 4초, 5주 13초, 9주 30초, 12주 44초 */
       v.addEventListener('timeupdate', () => {
-        const c = v.currentTime; const k = c < 14 ? 1 : c < 30 ? 2 : c < 44 ? 3 : 4;
+        const c = v.currentTime; const k = c < 13 ? 1 : c < 30 ? 2 : c < 44 ? 3 : 4;
         if (c > 0.1) this.step(0, k);
       });
     },

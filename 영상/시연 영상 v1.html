@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>운동해듀오 시연 영상</title>
+<style>
+@font-face { font-family: 'P'; font-weight: 45 920; src: url('../vendor/pretendard/PretendardVariable.woff2') format('woff2-variations'); }
+:root { --a:#EE6B78; --a1:#F39AA3; --a2:#F8C4C9; --a4:#FDEEF0; --at:#C8414F; --ink:#1F2328; --ink2:#4B5563; --mut:#8B93A1; --g1:#B8BEC7; --g2:#D5D9DE; --g3:#E3E6EA; --g4:#F1F3F5; --bg:#FAFAFA; --line:#E5E7EB; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+body { font-family: 'P', sans-serif; color: var(--ink); letter-spacing: -0.02em; word-break: keep-all; position: relative; }
+.ab { position: absolute; }
+#svg { position: absolute; left: 0; top: 0; }
+.top { left: 80px; top: 56px; right: 80px; height: 40px; display: flex; align-items: center; }
+.logo { font-size: 30px; font-weight: 800; color: var(--a); letter-spacing: -0.04em; }
+.logo span { color: var(--ink); }
+.prog { position: absolute; right: 0; top: 0; width: 760px; height: 40px; }
+.prog .tr { position: absolute; left: 0; right: 0; top: 30px; height: 6px; border-radius: 3px; background: var(--g3); }
+.prog .fi { position: absolute; left: 0; top: 30px; height: 6px; border-radius: 3px; background: var(--a); width: 0; }
+.prog .wk { position: absolute; top: 0; font-size: 22px; font-weight: 650; color: var(--g1); transform: translateX(-50%); }
+.cap { left: 80px; top: 150px; width: 1500px; }
+.cap .chip { display: inline-block; font-size: 26px; font-weight: 750; color: #fff; background: var(--a); border-radius: 999px; padding: 6px 20px; }
+.cap h1 { font-size: 60px; font-weight: 800; letter-spacing: -0.045em; margin-top: 14px; }
+.cap p { font-size: 30px; color: var(--ink2); margin-top: 10px; }
+.intro { left: 0; right: 0; top: 150px; text-align: center; }
+.intro .s { font-size: 40px; font-weight: 650; color: var(--a); }
+.intro .b { font-size: 96px; font-weight: 820; letter-spacing: -0.05em; margin-top: 8px; }
+.tab { left: 1000px; top: 300px; width: 800px; height: 720px; border-radius: 44px; background: #1F2328; padding: 22px; box-shadow: 0 40px 80px rgba(31,35,40,.22); transform-origin: 50% 100%; }
+.scr { width: 100%; height: 100%; border-radius: 26px; background: #fff; overflow: hidden; position: relative; }
+.scr .hdr { height: 84px; border-bottom: 1.5px solid var(--line); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; }
+.scr .hdr b { font-size: 30px; font-weight: 750; }
+.scr .hdr span { font-size: 26px; color: var(--ink2); }
+.scr .hdr span em { font-style: normal; font-weight: 750; color: var(--at); font-size: 32px; }
+.hero { margin: 24px 28px 0; border-radius: 22px; background: var(--a4); border: 2px solid var(--a2); padding: 22px 26px; position: relative; }
+.hero .nm { font-size: 32px; font-weight: 750; }
+.hero .nm small { font-size: 24px; font-weight: 500; color: var(--ink2); margin-left: 10px; }
+.hero .row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 16px; font-size: 26px; color: var(--ink2); }
+.hero .row b { font-size: 46px; font-weight: 800; color: var(--ink); letter-spacing: -0.03em; }
+.hero .row b i { font-style: normal; font-size: 24px; font-weight: 600; margin-left: 4px; }
+.hero .ok { position: absolute; right: 24px; top: 20px; font-size: 22px; font-weight: 700; color: #fff; background: var(--a); border-radius: 999px; padding: 4px 14px; }
+.lst { position: absolute; left: 28px; right: 28px; top: 470px; bottom: 0; overflow: hidden; }
+.bas { display: flex; gap: 14px; margin-top: 16px; }
+.bas div { flex: 1; background: #fff; border-radius: 14px; padding: 10px 16px; display: flex; justify-content: space-between; align-items: baseline; }
+.bas span { font-size: 22px; color: var(--ink2); }
+.bas b { font-size: 34px; font-weight: 800; letter-spacing: -0.03em; }
+.bas b i { font-style: normal; font-size: 20px; font-weight: 600; margin-left: 3px; }
+.lst .in { position: absolute; left: 0; right: 0; top: 0; }
+.lr { height: 56px; display: flex; align-items: center; border-bottom: 1.5px solid var(--g4); font-size: 25px; }
+.lr .n { width: 200px; font-weight: 650; }
+.lr .v { flex: 1; color: var(--ink2); }
+.card { left: 1210px; top: 470px; width: 600px; height: 470px; background: #fff; border-radius: 10px; box-shadow: 0 30px 60px rgba(31,35,40,.16), 0 2px 0 var(--line); overflow: hidden; transform-origin: 50% 0; }
+.card .bd { height: 18px; background: var(--a); }
+.card .ct { padding: 28px 36px; }
+.card .t { font-size: 24px; font-weight: 700; color: var(--at); }
+.card .p { font-size: 40px; font-weight: 800; margin-top: 10px; letter-spacing: -0.04em; }
+.card .r { display: flex; font-size: 26px; margin-top: 18px; }
+.card .r span { width: 160px; color: var(--mut); }
+.card .f { position: absolute; left: 36px; right: 36px; bottom: 26px; border-top: 2px dashed var(--g2); padding-top: 16px; font-size: 22px; color: var(--ink2); }
+.alert { left: 1150px; top: 300px; width: 690px; background: rgba(255,255,255,.96); border-radius: 26px; border: 1.5px solid var(--line); box-shadow: 0 30px 60px rgba(31,35,40,.18); padding: 26px 30px; }
+.alert .h { display: flex; align-items: center; gap: 14px; font-size: 22px; font-weight: 700; color: var(--at); }
+.alert .h i { width: 34px; height: 34px; border-radius: 50%; background: var(--a); display: inline-block; position: relative; }
+.alert .h i:after { content: '!'; position: absolute; inset: 0; color: #fff; font-style: normal; font-weight: 800; text-align: center; line-height: 34px; font-size: 22px; }
+.alert .m { font-size: 32px; font-weight: 750; margin-top: 12px; }
+.alert .s { font-size: 25px; color: var(--ink2); margin-top: 8px; }
+.call { left: 1150px; top: 540px; height: 76px; border-radius: 999px; background: var(--ink); color: #fff; display: flex; align-items: center; gap: 16px; padding: 0 34px 0 18px; font-size: 28px; font-weight: 650; }
+.call .ic { width: 46px; height: 46px; border-radius: 50%; background: var(--a); display: flex; align-items: center; justify-content: center; }
+.grid { left: 150px; top: 330px; }
+.gl { position: absolute; font-size: 21px; color: var(--ink2); white-space: nowrap; }
+.gw { position: absolute; font-size: 20px; color: var(--mut); text-align: center; width: 70px; }
+.cell { position: absolute; width: 62px; height: 22px; border-radius: 6px; background: var(--g4); }
+.meas { left: 460px; top: 380px; width: 1000px; background: #fff; border-radius: 30px; border: 1.5px solid var(--line); box-shadow: 0 30px 60px rgba(31,35,40,.12); padding: 40px 54px; }
+.meas .t { font-size: 28px; font-weight: 700; color: var(--at); }
+.meas .nm { font-size: 44px; font-weight: 800; margin-top: 6px; letter-spacing: -0.04em; }
+.mr { margin-top: 34px; }
+.mr .l { font-size: 28px; color: var(--ink2); }
+.mr .v { display: flex; align-items: baseline; gap: 18px; margin-top: 8px; }
+.mr .v .a { font-size: 44px; font-weight: 700; color: var(--g1); }
+.mr .v .ar { font-size: 36px; color: var(--g1); }
+.mr .v .b { font-size: 76px; font-weight: 850; color: var(--at); letter-spacing: -0.04em; }
+.mr .v .u { font-size: 30px; font-weight: 650; color: var(--at); }
+.bars { position: relative; height: 18px; margin-top: 12px; }
+.bars div { position: absolute; left: 0; top: 0; height: 18px; border-radius: 9px; }
+.end { left: 0; right: 0; top: 330px; text-align: center; }
+.end .b { font-size: 140px; font-weight: 850; color: var(--a); letter-spacing: -0.06em; }
+.end .s { font-size: 54px; font-weight: 700; margin-top: 18px; letter-spacing: -0.04em; }
+.end .m { font-size: 30px; color: var(--ink2); margin-top: 34px; }
+.tag { position: absolute; font-size: 24px; font-weight: 700; background: #fff; border: 2px solid var(--a); color: var(--at); border-radius: 12px; padding: 8px 16px; white-space: nowrap; }
+.tagg { border-color: var(--g1); color: var(--ink2); }
+.cnt { right: 120px; top: 380px; text-align: right; }
+.cnt .n { font-size: 84px; font-weight: 850; color: var(--at); letter-spacing: -0.04em; }
+.cnt .n i { font-style: normal; font-size: 36px; font-weight: 700; margin-left: 6px; }
+.cnt .l { font-size: 26px; color: var(--ink2); }
+</style>
+</head>
+<body>
+<svg id="svg" width="1920" height="1080" viewBox="0 0 1920 1080"></svg>
+<div class="ab top"><div class="logo">운동해<span>듀오</span></div>
+  <div class="prog"><div class="tr"></div><div class="fi" id="pfill"></div></div></div>
+<div class="ab intro" id="intro"><div class="s">등촌제3동</div><div class="b">지도자 한 사람의 12주</div></div>
+<div class="ab cap" id="cap"><span class="chip" id="cchip"></span><h1 id="ctitle"></h1><p id="csub"></p></div>
+<div class="ab tab" id="tab"><div class="scr">
+  <div class="hdr"><b>등촌제3동 명단</b><span>입력 <em id="lcount">0</em>명</span></div>
+  <div class="hero" id="hero"><div class="nm">장득춘 님<small>남</small></div><span class="ok" id="hok">입력됨</span>
+    <div class="bas"><div><span>나이</span><b><span id="ha">0</span><i>세</i></b></div><div><span>키</span><b><span id="hh">0</span><i>cm</i></b></div><div><span>체중</span><b><span id="hkg">0</span><i>kg</i></b></div></div>
+    <div class="row"><span>의자 일어서기 (30초)</span><b><span id="hc">0</span><i>회</i></b></div>
+    <div class="row" style="margin-top:6px"><span>2분 제자리 걷기</span><b><span id="hw">0</span><i>회</i></b></div></div>
+  <div class="lst"><div class="in" id="lin"></div></div>
+</div></div>
+<div class="ab cnt" id="cnt"><div class="n"><span id="pc">0</span><i>쌍</i></div><div class="l">짝을 맺은 수</div></div>
+<div class="ab card" id="card"><div class="bd"></div><div class="ct">
+  <div class="t">운동 짝 카드</div><div class="p">장득춘 님 · 황진호 님</div>
+  <div class="r"><span>만나는 곳</span>월드메르디앙 경로당</div>
+  <div class="r"><span>시간</span>화·금 오전 10시</div>
+  <div class="r"><span>같이 할 운동</span>걷기 30분 · 의자 일어서기</div></div>
+  <div class="f">지도자가 종이 카드로 출력해 드림</div></div>
+<div class="ab grid" id="grid"></div>
+<div class="ab alert" id="alert"><div class="h"><i></i>도구가 먼저 알림</div>
+  <div class="m">황진호 님이 3주째 나오지 않음</div><div class="s">새 짝 후보: 황정수 님 · 체력 차이 작음 · 걸어서 9분</div></div>
+<div class="ab call" id="call"><span class="ic"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#fff" d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg></span>지도자가 전화로 사정을 확인</div>
+<div class="ab meas" id="meas"><div class="t">12주 다시 측정</div><div class="nm">장득춘 님</div>
+  <div class="mr"><div class="l">의자 일어서기 (30초)</div><div class="v"><span class="a">14회</span><span class="ar">→</span><span class="b" id="m1">14</span><span class="u">회</span></div>
+    <div class="bars"><div style="background:var(--g3);width:100%"></div><div id="mb1" style="background:var(--a)"></div></div></div>
+  <div class="mr"><div class="l">2분 제자리 걷기</div><div class="v"><span class="a">112회</span><span class="ar">→</span><span class="b" id="m2">112</span><span class="u">회</span></div>
+    <div class="bars"><div style="background:var(--g3);width:100%"></div><div id="mb2" style="background:var(--a)"></div></div></div></div>
+<div class="ab end" id="end"><div class="b">운동해듀오</div><div class="s">짝을 맺고, 끊기면 다시 맺는 도구</div><div class="m">쓰는 사람은 지도자 · 노인은 종이 카드와 전화로 받음</div></div>
+
+<script src="자료.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+const svg = $('svg');
+const mk = (tag, attrs, parent = svg) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const p = (t, a, b) => cl((t - a) / (b - a));             // 0~1 진행
+const lerp = (a, b, k) => a + (b - a) * k;
+const eo = (k) => 1 - Math.pow(1 - k, 3);                  // ease out cubic
+const eio = (k) => (k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+const eob = (k) => { const c1 = 1.5, c3 = c1 + 1; return 1 + c3 * Math.pow(k - 1, 3) + c1 * Math.pow(k - 1, 2); };
+const fadeIO = (t, a, b, c, d) => Math.min(eo(p(t, a, b)), 1 - eo(p(t, c, d)));
+
+const P = D.people, IDX = Object.fromEntries(P.map((q, i) => [q.name, i]));
+// 짝 순서: 화면에서 이어지는 순서
+const PAIRS = D.pairs;
+
+/* ── 지도 ── */
+const MAP0 = { x: 560, y: 340, w: 800, h: 660 }, MAP1 = { x: 90, y: 330, w: 820, h: 680 };
+const gMap = mk('g', {});
+const blob = (() => { const pts = []; for (let i = 0; i < 28; i++) { const a = i / 28 * Math.PI * 2; const r = 1 + .06 * Math.sin(i * 2.3) + .04 * Math.cos(i * 5.1); pts.push([.5 + .49 * r * Math.cos(a), .5 + .45 * r * Math.sin(a)]); } return pts; })();
+const outline = mk('path', { fill: '#fff', stroke: '#D5D9DE', 'stroke-width': 3, 'stroke-linejoin': 'round' }, gMap);
+const streets = [[.1, .3, .9, .38], [.05, .62, .95, .55], [.35, .05, .42, .95], [.66, .08, .6, .92], [.18, .82, .8, .2]].map((s) => mk('line', { stroke: '#EEF0F2', 'stroke-width': 10, 'stroke-linecap': 'round' }, gMap));
+const centers = [[.47, .4], [.25, .55], [.7, .3], [.62, .7], [.3, .25]].map((c, i) => mk('rect', { width: 22, height: 22, rx: 5, fill: i === 0 ? '#F8C4C9' : '#E3E6EA' }, gMap));
+const mapLabel = mk('text', { 'font-size': 26, 'font-weight': 700, fill: '#8B93A1' }, gMap); mapLabel.textContent = '등촌제3동';
+const cLabel = mk('text', { 'font-size': 20, 'font-weight': 650, fill: '#C8414F' }, gMap); cLabel.textContent = '월드메르디앙 경로당';
+
+/* ── 산점도 축 ── */
+const PL = { x: 200, y: 410, w: 1460, h: 560 };
+const sx = (w) => PL.x + (w - 55) / (170 - 55) * PL.w, sy = (c) => PL.y + PL.h - (c - 4) / (26 - 4) * PL.h;
+const gAx = mk('g', {});
+const axX = mk('line', { x1: PL.x, y1: PL.y + PL.h, x2: PL.x + PL.w, y2: PL.y + PL.h, stroke: '#B8BEC7', 'stroke-width': 2 }, gAx);
+const axY = mk('line', { x1: PL.x, y1: PL.y + PL.h, x2: PL.x, y2: PL.y, stroke: '#B8BEC7', 'stroke-width': 2 }, gAx);
+const axXl = mk('text', { x: PL.x + PL.w, y: PL.y + PL.h + 44, 'text-anchor': 'end', 'font-size': 24, fill: '#4B5563', 'font-weight': 600 }, gAx); axXl.textContent = '2분 제자리 걷기 →';
+const axYl = mk('text', { x: PL.x - 20, y: PL.y - 18, 'font-size': 24, fill: '#4B5563', 'font-weight': 600 }, gAx); axYl.textContent = '↑ 의자 일어서기';
+const legend = mk('text', { x: PL.x + 20, y: PL.y + PL.h + 44, 'font-size': 22, fill: '#8B93A1' }, gAx); legend.textContent = '● 남  ○ 여 · 같은 성별끼리 맺음';
+
+/* ── 짝 선과 점 ── */
+const gLines = mk('g', {});
+const lines = PAIRS.map((pr, i) => mk('line', { stroke: '#F39AA3', 'stroke-width': 4, 'stroke-linecap': 'round' }, gLines));
+const gDots = mk('g', {});
+const jit = P.map((q, i) => [((i * 37) % 11 - 5) * 2.2, ((i * 53) % 9 - 4) * 2.2]);
+const rings = mk('circle', { r: 30, fill: 'none', stroke: '#EE6B78', 'stroke-width': 3 }, gDots);
+const dots = P.map((q) => mk('circle', { r: 12, 'stroke-width': 3 }, gDots));
+const lbl = (txt) => { const e = document.createElement('div'); e.className = 'tag'; e.textContent = txt; document.body.appendChild(e); return e; };
+const tHero = lbl('장득춘 님'), tP1 = lbl('황진호 님'), tUn = lbl('강영자 님 · 맞는 짝 없음 → 지도자와 소모임');
+tUn.classList.add('tagg');
+
+/* ── 명단 줄 ── */
+const order = P.map((q, i) => i).filter((i) => P[i].name !== '장득춘');
+order.forEach((i) => { const r = document.createElement('div'); r.className = 'lr'; r.innerHTML = `<span class="n">${P[i].name} 님</span><span class="v">의자 ${P[i].chair}회 · 걷기 ${P[i].walk}회</span>`; $('lin').appendChild(r); });
+const lrows = [...$('lin').children];
+
+/* ── 출석 격자 ── */
+const G0 = { x: 150, y: 330 }, RH = 34, CW = 76, LW = 300;
+const gr = $('grid');
+const glabels = PAIRS.map((pr, r) => { const e = document.createElement('div'); e.className = 'gl'; e.style.left = '0px'; e.style.top = (r * RH + 34) + 'px'; e.textContent = `${pr[0]} · ${pr[1]}`; gr.appendChild(e); return e; });
+const alt0 = document.createElement('div'); alt0.className = 'gl'; alt0.style.top = '34px'; alt0.textContent = '장득춘 · 황정수'; alt0.style.color = '#C8414F'; alt0.style.fontWeight = '750'; gr.appendChild(alt0);
+const alt1 = document.createElement('div'); alt1.className = 'gl'; alt1.style.top = (RH + 34) + 'px'; alt1.textContent = `${PAIRS[1][1]} 님 그만둠`; alt1.style.color = '#B8BEC7'; gr.appendChild(alt1);
+for (let w = 0; w < 12; w++) { const e = document.createElement('div'); e.className = 'gw'; e.style.left = (LW + w * CW - 4) + 'px'; e.style.top = '0px'; e.textContent = (w + 1) + '주'; gr.appendChild(e); }
+const cells = PAIRS.map((pr, r) => Array.from({ length: 12 }, (_, w) => { const e = document.createElement('div'); e.className = 'cell'; e.style.left = (LW + w * CW) + 'px'; e.style.top = (r * RH + 40) + 'px'; gr.appendChild(e); return e; }));
+
+/* ── 진행 막대 ── */
+const WK = [['1주', 0], ['5주', 4 / 11], ['9주', 8 / 11], ['12주', 1]];
+const wkEl = WK.map(([s, f]) => { const e = document.createElement('div'); e.className = 'wk'; e.style.left = (f * 100) + '%'; e.textContent = s; document.querySelector('.prog').appendChild(e); return e; });
+
+const CAPS = [
+  [4, 18, '1주', '찾아가서 넣기', '집으로 찾아가 나이·키·체중을 넣고, 의자 일어서기와 2분 걷기를 측정'],
+  [18, 34, '5주', '체력이 비슷한 짝 맺기', '같은 성별에서 체력이 가까운 사람끼리, 동 전체를 한꺼번에 맺음'],
+  [34, 48, '9주', '먼저 알리고 다시 맺기', '결석이 이어지면 도구가 먼저 알리고, 지도자가 전화로 확인한 뒤 새 짝을 맺음'],
+  [48, 55.4, '12주', '다시 측정', '같은 사람의 의자 일어서기와 2분 제자리 걷기를 처음과 비교'],
+];
+
+function setOp(el, o, tf) { el.style.opacity = o; el.style.visibility = o <= 0.001 ? 'hidden' : 'visible'; if (tf !== undefined) el.style.transform = tf; }
+
+function render(t) {
+  /* 진행 막대 */
+  const segs = [[4, 0], [18, 4 / 11], [34, 8 / 11], [48, 1]];
+  let f = 0; segs.forEach(([s, v], i) => { if (t >= s) f = i === 0 ? v * eo(p(t, s, s + .8)) : lerp(segs[i - 1][1], v, eio(p(t, s, s + 1))); });
+  if (t < 4) f = 0;
+  $('pfill').style.width = (f * 100) + '%';
+  wkEl.forEach((e, i) => { const on = t >= segs[i][0]; e.style.color = on ? (i === CAPS.findIndex((c) => t >= c[0] && t < c[1] + 0.001) ? '#C8414F' : '#4B5563') : '#B8BEC7'; });
+  document.querySelector('.top').style.opacity = 1 - eo(p(t, 55.4, 56.2));
+
+  /* 첫 제목 */
+  setOp($('intro'), fadeIO(t, 0, .8, 3.3, 4.1), `translateY(${lerp(30, 0, eo(p(t, 0, .9))) - 20 * eo(p(t, 3.3, 4.1))}px)`);
+
+  /* 자막 */
+  const ci = CAPS.findIndex((c) => t >= c[0] - .2 && t < c[1]);
+  if (ci >= 0) { const c = CAPS[ci]; $('cchip').textContent = c[2]; $('ctitle').textContent = c[3]; $('csub').textContent = c[4];
+    const o = fadeIO(t, c[0] - .2, c[0] + .5, c[1] - .5, c[1] - .05); setOp($('cap'), o, `translateY(${lerp(24, 0, eo(p(t, c[0] - .2, c[0] + .6)))}px)`); }
+  else setOp($('cap'), 0);
+
+  /* 지도 위치 */
+  const mk2 = eio(p(t, 4, 5.3)); const R = { x: lerp(MAP0.x, MAP1.x, mk2), y: lerp(MAP0.y, MAP1.y, mk2), w: lerp(MAP0.w, MAP1.w, mk2), h: lerp(MAP0.h, MAP1.h, mk2) };
+  const mx = (u) => R.x + u * R.w, my = (v) => R.y + v * R.h;
+  const draw = eo(p(t, .2, 1.6));
+  const d = blob.map((q, i) => (i ? 'L' : 'M') + mx(q[0]).toFixed(1) + ' ' + my(q[1]).toFixed(1)).join(' ') + 'Z';
+  outline.setAttribute('d', d);
+  const mapOp = (t < 18.4 ? 1 : 1 - eo(p(t, 18.4, 19.4)));
+  gMap.style.opacity = mapOp * Math.min(1, draw * 1.4);
+  outline.style.strokeDasharray = 3400; outline.style.strokeDashoffset = 3400 * (1 - draw);
+  [[.1, .3, .9, .38], [.05, .62, .95, .55], [.35, .05, .42, .95], [.66, .08, .6, .92], [.18, .82, .8, .2]].forEach((s, i) => { const L = streets[i]; L.setAttribute('x1', mx(s[0])); L.setAttribute('y1', my(s[1])); L.setAttribute('x2', mx(s[2])); L.setAttribute('y2', my(s[3])); L.style.opacity = eo(p(t, .8 + i * .1, 1.6 + i * .1)); });
+  [[.47, .4], [.25, .55], [.7, .3], [.62, .7], [.3, .25]].forEach((c, i) => { centers[i].setAttribute('x', mx(c[0]) - 11); centers[i].setAttribute('y', my(c[1]) - 11); centers[i].style.opacity = eo(p(t, 1.4 + i * .1, 2 + i * .1)); });
+  mapLabel.setAttribute('x', mx(.06)); mapLabel.setAttribute('y', my(.06)); mapLabel.style.opacity = eo(p(t, 4.4, 5.2));
+  cLabel.setAttribute('x', mx(.47) - 90); cLabel.setAttribute('y', my(.4) + 40); cLabel.style.opacity = 0;
+
+  /* 점 */
+  const toSc = (i) => eio(p(t, 19 + (i % 13) * .05, 21.2 + (i % 13) * .05));
+  const H = IDX['장득춘'], J = IDX['황진호'], S2 = IDX['황정수'], U = IDX[D.unmatched];
+  const focus = eio(p(t, 27.3, 28.4));
+  const scOut = 1 - eo(p(t, 33.6, 34.6));
+  P.forEach((q, i) => {
+    const appear = eob(p(t, .9 + (i % 39) * .065, 1.3 + (i % 39) * .065));
+    const k = toSc(i);
+    const x = lerp(mx(q.mx), sx(q.walk) + jit[i][0], k), y = lerp(my(q.my), sy(q.chair) + jit[i][1], k);
+    const c = dots[i]; c.setAttribute('cx', x.toFixed(1)); c.setAttribute('cy', y.toFixed(1));
+    const ri = order.indexOf(i); const measured = i === H ? t >= 7.8 : t >= 10.4 + ri * .16;
+    let fill = measured ? '#8B93A1' : '#D5D9DE';
+    if (i === H && t >= 5.8) fill = '#EE6B78';
+    const female = q.sex === 'F';
+    const sc = k; // 산점도에서는 성별 표시
+    c.setAttribute('r', (i === H ? 14 : 12) * appear);
+    c.setAttribute('fill', female && sc > .5 && i !== H ? '#fff' : fill);
+    c.setAttribute('stroke', female && sc > .5 && i !== H ? '#8B93A1' : (i === H && t >= 5.8 ? '#EE6B78' : fill));
+    let op = 1;
+    if (focus > 0 && i !== H && i !== J) op = lerp(1, .22, focus);
+    if (i === U && t > 25.4 && t < 27.4) op = 1;
+    c.style.opacity = op * (t < 18 ? 1 : scOut);
+    if (i === J && focus > 0) { c.setAttribute('fill', '#EE6B78'); c.setAttribute('stroke', '#EE6B78'); c.setAttribute('r', 14); }
+  });
+  /* 주인공 고리 */
+  const hx = +dots[H].getAttribute('cx'), hy = +dots[H].getAttribute('cy');
+  const pul = (t - 5.8) % 1.4 / 1.4;
+  rings.setAttribute('cx', hx); rings.setAttribute('cy', hy); rings.setAttribute('r', 16 + 22 * pul);
+  rings.style.opacity = (t >= 5.8 && t < 17.8) ? (1 - pul) * .9 : 0;
+
+  /* 축 */
+  gAx.style.opacity = fadeIO(t, 19.2, 20.2, 33.6, 34.6);
+  axX.style.strokeDasharray = 1500; axX.style.strokeDashoffset = 1500 * (1 - eo(p(t, 19.2, 20.4)));
+  axY.style.strokeDasharray = 700; axY.style.strokeDashoffset = 700 * (1 - eo(p(t, 19.2, 20.4)));
+
+  /* 짝 선 */
+  let made = 0;
+  PAIRS.forEach((pr, r) => {
+    const a = IDX[pr[0]], b = IDX[pr[1]]; const L = lines[r];
+    const st = 22 + r * .18, k = eo(p(t, st, st + .5)); if (t >= st + .25) made++;
+    const ax = +dots[a].getAttribute('cx'), ay = +dots[a].getAttribute('cy'), bx = +dots[b].getAttribute('cx'), by = +dots[b].getAttribute('cy');
+    L.setAttribute('x1', ax); L.setAttribute('y1', ay); L.setAttribute('x2', lerp(ax, bx, k)); L.setAttribute('y2', lerp(ay, by, k));
+    const isH = r === 0;
+    L.setAttribute('stroke', isH && focus > 0 ? '#EE6B78' : '#F39AA3');
+    L.setAttribute('stroke-width', isH ? lerp(4, 8, focus) : 4);
+    L.style.opacity = (k > 0 ? 1 : 0) * (isH ? 1 : lerp(1, .2, focus)) * scOut;
+  });
+  $('pc').textContent = made;
+  setOp($('cnt'), fadeIO(t, 21.8, 22.4, 28.4, 29));
+
+  /* 이름표 */
+  const tag = (el, i, o, dx = 22, dy = -62) => { el.style.left = (+dots[i].getAttribute('cx') + dx) + 'px'; el.style.top = (+dots[i].getAttribute('cy') + dy) + 'px'; setOp(el, o); };
+  tag(tHero, H, Math.max(fadeIO(t, 6, 6.6, 17.4, 18), fadeIO(t, 27.6, 28.4, 33.4, 34)), 24, -64);
+  tag(tP1, J, fadeIO(t, 27.8, 28.6, 33.4, 34), 24, 14);
+  tag(tUn, U, fadeIO(t, 25.4, 26, 27.2, 27.8), 24, -26);
+
+  /* 태블릿 */
+  const rise = eo(p(t, 4.6, 6));
+  const exit = eio(p(t, 17.8, 18.9));
+  setOp($('tab'), Math.min(1, rise * 2) * (1 - exit), `perspective(1600px) translate(${1100 * exit}px, ${lerp(760, 0, rise)}px) rotateX(${lerp(20, 0, rise)}deg) scale(${lerp(.88, 1, rise)})`);
+  $('ha').textContent = Math.round(78 * eo(p(t, 5.9, 6.6)));
+  $('hh').textContent = Math.round(166 * eo(p(t, 6.1, 6.8)));
+  $('hkg').textContent = Math.round(61 * eo(p(t, 6.3, 7.0)));
+  $('hc').textContent = Math.round(14 * eo(p(t, 7.1, 8.1)));
+  $('hw').textContent = Math.round(112 * eo(p(t, 8.1, 9.3)));
+  setOp($('hok'), eob(p(t, 9.3, 9.8)), `scale(${lerp(.6, 1, eob(p(t, 9.3, 9.8)))})`);
+  let shown = 1;
+  lrows.forEach((r, k) => { const st = 10.4 + k * .16; const o = eo(p(t, st, st + .3)); if (t >= st) shown++; r.style.opacity = o; r.style.transform = `translateY(${lerp(16, 0, o)}px)`; });
+  $('lcount').textContent = t < 8.1 ? 0 : Math.min(39, shown);
+  const visible = 3; const rowsIn = Math.max(0, shown - 1 - visible);
+  $('lin').style.transform = `translateY(${-56 * Math.max(0, lerp(0, rowsIn, 1))}px)`;
+
+  /* 종이 카드 */
+  const pr = eo(p(t, 28.9, 30.4));
+  setOp($('card'), Math.min(1, pr * 3) * (1 - eo(p(t, 33.4, 34.2))), `translateY(${lerp(60, 0, pr)}px) rotate(${lerp(-3, 0, pr)}deg)`);
+  $('card').style.clipPath = `inset(0 0 ${(1 - pr) * 100}% 0 round 10px)`;
+
+  /* 출석 격자 */
+  setOp(gr, fadeIO(t, 34.6, 35.6, 55.2, 56) * (t > 49.8 ? lerp(1, .12, eo(p(t, 49.8, 50.6))) : 1));
+  const wkNow = t < 36 ? 0 : t < 41.5 ? 8 * p(t, 36, 41.5) : t < 46 ? 8 : t < 47.5 ? 8 + p(t, 46, 47.5) : t < 48 ? 9 : 9 + 3 * p(t, 48, 49.6);
+  const swap = eo(p(t, 44.8, 45.8));
+  cells.forEach((row, r) => row.forEach((e, w) => {
+    const on = wkNow >= w + 1 ? 1 : cl(wkNow - w) ;
+    const at = D.attendance[r][w];
+    let bg = '#F1F3F5';
+    if (on > .5) bg = at ? (r === 0 ? '#EE6B78' : '#F8C4C9') : '#B8BEC7';
+    if (r === 1 && w >= 8 && on > .5) bg = '#F1F3F5';
+    e.style.background = bg;
+    e.style.transform = `scale(${on > 0 && on < 1 ? lerp(.6, 1, on) : 1})`;
+    const warn = r === 0 && w >= 5 && w <= 7 && t > 41.6 && t < 46;
+    e.style.boxShadow = warn ? `0 0 0 ${3 + 3 * Math.abs(Math.sin((t - 41.6) * 4))}px rgba(238,107,120,.55)` : 'none';
+    e.style.opacity = r === 1 && w >= 8 ? lerp(1, .3, swap) : 1;
+  }));
+  glabels.forEach((e, r) => { e.style.fontWeight = r === 0 ? '750' : '400'; e.style.color = r === 0 ? '#1F2328' : '#4B5563'; });
+  glabels[0].style.opacity = 1 - swap; alt0.style.opacity = swap;
+  glabels[1].style.opacity = 1 - swap; alt1.style.opacity = swap;
+
+  /* 알림과 전화 */
+  const al = eob(p(t, 41.8, 42.6));
+  setOp($('alert'), Math.min(1, al * 2) * (1 - eo(p(t, 47.6, 48.3))), `translateY(${lerp(-60, 0, al)}px)`);
+  const ca = eob(p(t, 43.2, 43.9));
+  const wig = t > 43.9 && t < 45.2 ? Math.sin(t * 40) * 6 : 0;
+  setOp($('call'), Math.min(1, ca * 2) * (1 - eo(p(t, 47.6, 48.3))), `translateY(${lerp(30, 0, ca)}px)`);
+  $('call').querySelector('.ic').style.transform = `rotate(${wig}deg)`;
+
+  /* 다시 측정 */
+  const ms = eob(p(t, 50.3, 51.1));
+  setOp($('meas'), Math.min(1, ms * 2) * (1 - eo(p(t, 55.2, 56))), `translateY(${lerp(40, 0, ms)}px)`);
+  const k1 = eo(p(t, 51.4, 53)), k2 = eo(p(t, 53, 54.6));
+  $('m1').textContent = Math.round(lerp(14, 16, k1)); $('m2').textContent = Math.round(lerp(112, 121, k2));
+  $('mb1').style.width = (lerp(14, 16, k1) / 24 * 100) + '%'; $('mb2').style.width = (lerp(112, 121, k2) / 160 * 100) + '%';
+
+  /* 끝 화면 */
+  const en = eo(p(t, 56.2, 57.2));
+  setOp($('end'), en, `translateY(${lerp(30, 0, en)}px)`);
+}
+/* 명단이 올라가는 구간(원래 10.4~16.8초)을 2.4초로 줄이고 뒤를 당긴다 */
+const RS = 10.4, RO = 6.4, RN = 2.4;
+const warp = (T) => (T < RS ? T : T < RS + RN ? RS + (T - RS) * RO / RN : T + (RO - RN));
+const baseRender = render;
+window.render = (T) => baseRender(warp(T));
+window.DUR = 60 - (RO - RN);
+const q = new URLSearchParams(location.search);
+if (q.has('t')) window.render(+q.get('t'));
+else if (!q.has('cap')) { const t0 = performance.now(); const loop = () => { const t = ((performance.now() - t0) / 1000) % window.DUR; window.render(t); requestAnimationFrame(loop); }; loop(); }
+</script>
+</body>
+</html>
