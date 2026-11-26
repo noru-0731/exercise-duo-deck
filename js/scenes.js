@@ -371,7 +371,15 @@
     finish() { this.cards.forEach((c) => { c.classList.remove('cur', 'done'); }); if (this.ok) { try { this.v.currentTime = 48; } catch (e) { /* 영상 없음 */ } } },
     enter(sec, playing) {
       if (!this.ok) return;
-      try { this.v.currentTime = 0; if (playing) this.v.play(); } catch (e) { /* 영상 없음 */ }
+      try {
+        this.v.currentTime = 0;
+        if (playing) {
+          /* 배경음악을 켠 채 재생하고, 브라우저가 막으면 소리 없이 재생 */
+          this.v.muted = false;
+          const pr = this.v.play();
+          if (pr && pr.catch) pr.catch(() => { this.v.muted = true; this.v.play(); });
+        }
+      } catch (e) { /* 영상 없음 */ }
     },
     leave() { try { this.v.pause(); } catch (e) { /* 영상 없음 */ } },
   };

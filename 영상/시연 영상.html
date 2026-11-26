@@ -38,7 +38,12 @@ body { font-family: 'P', sans-serif; color: var(--ink); letter-spacing: -0.02em;
 .hero .row b { font-size: 46px; font-weight: 800; color: var(--ink); letter-spacing: -0.03em; }
 .hero .row b i { font-style: normal; font-size: 24px; font-weight: 600; margin-left: 4px; }
 .hero .ok { position: absolute; right: 24px; top: 20px; font-size: 22px; font-weight: 700; color: #fff; background: var(--a); border-radius: 999px; padding: 4px 14px; }
-.lst { position: absolute; left: 28px; right: 28px; top: 380px; bottom: 0; overflow: hidden; }
+.lst { position: absolute; left: 28px; right: 28px; top: 470px; bottom: 0; overflow: hidden; }
+.bas { display: flex; gap: 14px; margin-top: 16px; }
+.bas div { flex: 1; background: #fff; border-radius: 14px; padding: 10px 16px; display: flex; justify-content: space-between; align-items: baseline; }
+.bas span { font-size: 22px; color: var(--ink2); }
+.bas b { font-size: 34px; font-weight: 800; letter-spacing: -0.03em; }
+.bas b i { font-style: normal; font-size: 20px; font-weight: 600; margin-left: 3px; }
 .lst .in { position: absolute; left: 0; right: 0; top: 0; }
 .lr { height: 56px; display: flex; align-items: center; border-bottom: 1.5px solid var(--g4); font-size: 25px; }
 .lr .n { width: 200px; font-weight: 650; }
@@ -95,7 +100,8 @@ body { font-family: 'P', sans-serif; color: var(--ink); letter-spacing: -0.02em;
 <div class="ab cap" id="cap"><span class="chip" id="cchip"></span><h1 id="ctitle"></h1><p id="csub"></p></div>
 <div class="ab tab" id="tab"><div class="scr">
   <div class="hdr"><b>등촌제3동 명단</b><span>입력 <em id="lcount">0</em>명</span></div>
-  <div class="hero" id="hero"><div class="nm">장득춘 님<small>78세 · 남</small></div><span class="ok" id="hok">입력됨</span>
+  <div class="hero" id="hero"><div class="nm">장득춘 님<small>남</small></div><span class="ok" id="hok">입력됨</span>
+    <div class="bas"><div><span>나이</span><b><span id="ha">0</span><i>세</i></b></div><div><span>키</span><b><span id="hh">0</span><i>cm</i></b></div><div><span>체중</span><b><span id="hkg">0</span><i>kg</i></b></div></div>
     <div class="row"><span>의자 일어서기 (30초)</span><b><span id="hc">0</span><i>회</i></b></div>
     <div class="row" style="margin-top:6px"><span>2분 제자리 걷기</span><b><span id="hw">0</span><i>회</i></b></div></div>
   <div class="lst"><div class="in" id="lin"></div></div>
@@ -186,7 +192,7 @@ const WK = [['1주', 0], ['5주', 4 / 11], ['9주', 8 / 11], ['12주', 1]];
 const wkEl = WK.map(([s, f]) => { const e = document.createElement('div'); e.className = 'wk'; e.style.left = (f * 100) + '%'; e.textContent = s; document.querySelector('.prog').appendChild(e); return e; });
 
 const CAPS = [
-  [4, 18, '1주', '찾아가서 넣기', '지도자가 집으로 찾아가 의자 일어서기와 2분 제자리 걷기를 측정해 넣음'],
+  [4, 18, '1주', '찾아가서 넣기', '집으로 찾아가 나이·키·체중을 넣고, 의자 일어서기와 2분 걷기를 측정'],
   [18, 34, '5주', '체력이 비슷한 짝 맺기', '같은 성별에서 체력이 가까운 사람끼리, 동 전체를 한꺼번에 맺음'],
   [34, 48, '9주', '먼저 알리고 다시 맺기', '결석이 이어지면 도구가 먼저 알리고, 지도자가 전화로 확인한 뒤 새 짝을 맺음'],
   [48, 55.4, '12주', '다시 측정', '같은 사람의 의자 일어서기와 2분 제자리 걷기를 처음과 비교'],
@@ -286,13 +292,16 @@ function render(t) {
   const rise = eo(p(t, 4.6, 6));
   const exit = eio(p(t, 17.8, 18.9));
   setOp($('tab'), Math.min(1, rise * 2) * (1 - exit), `perspective(1600px) translate(${1100 * exit}px, ${lerp(760, 0, rise)}px) rotateX(${lerp(20, 0, rise)}deg) scale(${lerp(.88, 1, rise)})`);
-  $('hc').textContent = Math.round(14 * eo(p(t, 6.4, 7.6)));
-  $('hw').textContent = Math.round(112 * eo(p(t, 7.6, 9.2)));
+  $('ha').textContent = Math.round(78 * eo(p(t, 5.9, 6.6)));
+  $('hh').textContent = Math.round(166 * eo(p(t, 6.1, 6.8)));
+  $('hkg').textContent = Math.round(61 * eo(p(t, 6.3, 7.0)));
+  $('hc').textContent = Math.round(14 * eo(p(t, 7.1, 8.1)));
+  $('hw').textContent = Math.round(112 * eo(p(t, 8.1, 9.3)));
   setOp($('hok'), eob(p(t, 9.3, 9.8)), `scale(${lerp(.6, 1, eob(p(t, 9.3, 9.8)))})`);
   let shown = 1;
   lrows.forEach((r, k) => { const st = 10.4 + k * .16; const o = eo(p(t, st, st + .3)); if (t >= st) shown++; r.style.opacity = o; r.style.transform = `translateY(${lerp(16, 0, o)}px)`; });
-  $('lcount').textContent = t < 7.6 ? 0 : Math.min(39, shown);
-  const visible = 5; const rowsIn = Math.max(0, shown - 1 - visible);
+  $('lcount').textContent = t < 8.1 ? 0 : Math.min(39, shown);
+  const visible = 3; const rowsIn = Math.max(0, shown - 1 - visible);
   $('lin').style.transform = `translateY(${-56 * Math.max(0, lerp(0, rowsIn, 1))}px)`;
 
   /* 종이 카드 */
