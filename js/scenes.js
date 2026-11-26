@@ -271,7 +271,7 @@
     build() {
       const D = window.S14DATA;
       this.cv = $('s14-cv'); this.g = this.cv.getContext('2d');
-      this.W = 1128; this.H = 590; this.g.setTransform(2, 0, 0, 2, 0, 0);
+      this.W = 760; this.H = 590; this.g.setTransform(2, 0, 0, 2, 0, 0);
       const mx = D.d.reduce((a, r) => a + r[0], 0) / D.d.length, mz = D.d.reduce((a, r) => a + r[1], 0) / D.d.length;
       this.mx = mx; this.mz = mz;
       const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
@@ -332,12 +332,12 @@
     enter() { this.run = true; const f = (now) => { if (!this.run) return; this.draw(now); requestAnimationFrame(f); }; requestAnimationFrame(f); },
     leave() { this.run = false; },
     proj(x, y, z, now) {
-      const yaw = -0.32 + Math.sin((now - this.t0) / 9000) * 0.16, pit = 0.62, S = 2.5;
+      const yaw = -0.32 + Math.sin((now - this.t0) / 9000) * 0.16, pit = 0.62, S = 1.7;
       const cy = Math.cos(yaw), sy = Math.sin(yaw);
       const X = x * cy - z * sy, Z = x * sy + z * cy;
       const depth = Z * Math.cos(pit) + y * Math.sin(pit);
       const f = 1100 / (1100 - depth * 1.2);
-      return [this.W / 2 + 46 + X * S * f, 366 + (Z * Math.sin(pit) - y * Math.cos(pit)) * S * f, depth, Z];
+      return [this.W / 2 + 26 + X * S * f, 356 + (Z * Math.sin(pit) - y * Math.cos(pit)) * S * f, depth, Z];
     },
     draw(now) {
       const g = this.g, W = this.W, H = this.H;
