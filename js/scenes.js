@@ -101,13 +101,13 @@
       const svg = (this.svg = DECK.svg($('s10')));
       DECK.el(svg, 'line', { x1: 360, y1: S10.yA + 2, x2: 1560, y2: S10.yA + 2, stroke: C.g3, 'stroke-width': 3 });
       this.lineB = DECK.el(svg, 'line', { x1: 360, y1: S10.yB + 2, x2: 1560, y2: S10.yB + 2, stroke: C.a3, 'stroke-width': 3 });
-      this.ra = S10.rand.map(([a, b]) => arc(svg, S10.x[a], S10.x[b], S10.yA - 14, C.g1, 4));
+      this.ra = S10.rand.map(([a, b]) => arc(svg, S10.x[a], S10.x[b], S10.yA - 14, C.g2, 4));
       this.na = S10.near.map(([a, b]) => arc(svg, S10.x[a], S10.x[b], S10.yB - 14, C.a, 6));
       this.d = DECK.dots(svg, S10.n, 13);
       this.e = DECK.dots(svg, S10.n, 13);
     },
     reset() {
-      this.d.forEach((c) => { DECK.pos(c, 960, S10.yA); DECK.fill(c, C.ink, 1); });
+      this.d.forEach((c) => { DECK.pos(c, 960, S10.yA); DECK.fill(c, C.g1, 1); });
       this.e.forEach((c, i) => { DECK.pos(c, S10.x[i], S10.yA); DECK.fill(c, C.a, 0); });
       this.ra.forEach((p) => { p.style.opacity = 0; });
       this.na.forEach((p) => { p.style.opacity = 0; });
