@@ -1,11 +1,11 @@
 /* 장면 엔진: 장을 넘기면 그 장의 차례가 나레이션 길이에 맞춰 저절로 나온다 */
 (function () {
   const RATE = 5;          // 1초에 읽는 글자 수 (1분에 300자)
-  const LEAD_IN = 400;     // 장을 넘기고 첫 차례까지
+  const LEAD_IN = 200;     // 장을 넘기고 첫 차례까지
   const params = new URLSearchParams(location.search);
   const FINAL = params.has('final');
   const NARR = params.has('narr');   // 기본은 장을 넘기면 움직임이 짧은 간격으로 주르륵. ?narr 는 나레이션 속도
-  const GAP = 380;                   // 기본 방식에서 차례 사이 간격(ms)
+  const GAP = 300;                   // 기본 방식에서 차례 사이 간격(ms). 모든 장이 같은 간격
   const SPEED = parseFloat(params.get('speed') || '1');
 
   window.DECK = { scenes: {}, FINAL };
@@ -87,7 +87,7 @@
     resetSec(sec);
     void sec.offsetWidth;
     let { times } = stepTimes(sec);
-    if (!NARR) { const gp = parseInt(sec.dataset.gap || GAP, 10); times = times.map((_, i) => i * gp); }
+    if (!NARR) { times = times.map((_, i) => i * GAP); }
     afterPaint(() => {
       sec.classList.remove('final');
       const sc = DECK.scenes[sec.id];

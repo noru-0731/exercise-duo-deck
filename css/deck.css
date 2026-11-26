@@ -101,19 +101,19 @@ html, body { background: var(--bg); }
 .tbl tr.hl td { color: var(--ink); font-weight: 600; }
 
 /* 차례 등장: data-s 가 붙은 요소는 그 차례에 나온다 */
-[data-s] { opacity: 0; transform: translateY(14px); transition: opacity .7s var(--ease), transform .9s var(--ease); }
+[data-s] { opacity: 0; transform: translateY(14px); transition: opacity .45s var(--ease), transform .5s var(--ease); }
 [data-s].on { opacity: 1; transform: none; }
 [data-s].fx { transform: none; }               /* 자리 이동 없이 나타나기 */
-.bar[data-s] { opacity: 1; transform: scaleX(0); transition: transform 1.3s var(--ease); }
+.bar[data-s] { opacity: 1; transform: scaleX(0); transition: transform .7s var(--ease); }
 .bar[data-s].on { transform: scaleX(1); }
-.barv[data-s] { opacity: 1; transform: scaleY(0); transform-origin: center bottom; transition: transform 1.3s var(--ease); }
+.barv[data-s] { opacity: 1; transform: scaleY(0); transform-origin: center bottom; transition: transform .7s var(--ease); }
 .barv[data-s].on { transform: scaleY(1); }
 [data-out].off { opacity: 0 !important; transition: opacity .8s var(--ease); }
 [data-dim].dim { opacity: .28 !important; transition: opacity .8s var(--ease); }
 
 /* 점 */
 svg.dots { position: absolute; overflow: visible; }
-svg.dots circle { transition: transform 1.4s var(--ease), fill .8s var(--ease), opacity .8s var(--ease), r .8s var(--ease); }
+svg.dots circle { transition: transform .8s var(--ease), fill .5s var(--ease), opacity .5s var(--ease), r .5s var(--ease); }
 svg line, svg path { transition: stroke .8s var(--ease), stroke-width .8s var(--ease), opacity .8s var(--ease); }
 
 .final [data-s], .final .bar[data-s], .final svg.dots circle, .final svg line, .final svg path { transition: none !important; }

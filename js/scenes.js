@@ -52,7 +52,7 @@
         this.d.forEach((c, i) => { c.style.transitionDelay = (instant ? 0 : i * 6) + 'ms'; c.style.opacity = 1; });
         this.pairs.forEach(([a, b], n) => {
           if (instant) { this.join(a); this.join(b); return; }
-          this.t.push(setTimeout(() => { this.join(a); this.join(b); }, 900 + n * 160));
+          this.t.push(setTimeout(() => { this.join(a); this.join(b); }, 400 + n * 80));
         });
       },
     };
@@ -116,11 +116,11 @@
     start() { this.d.forEach((c, i) => DECK.pos(c, S10.x[i], S10.yA, i * 20)); },
     step(sec, k, instant) {
       const D = (ms) => (instant ? 0 : ms) + 'ms';
-      if (k === 1) this.ra.forEach((p, i) => { p.style.transitionDelay = D(500 + i * 90); p.style.opacity = 1; });
+      if (k === 1) this.ra.forEach((p, i) => { p.style.transitionDelay = D(200 + i * 50); p.style.opacity = 1; });
       if (k === 3) {
         this.lineB.style.transitionDelay = D(0); this.lineB.style.opacity = 1;
         this.e.forEach((c, i) => { c.style.transitionDelay = D(i * 20); c.style.opacity = 1; DECK.pos(c, S10.x[i], S10.yB, instant ? 0 : i * 20); });
-        this.na.forEach((p, i) => { p.style.transitionDelay = D(900 + i * 80); p.style.opacity = 1; });
+        this.na.forEach((p, i) => { p.style.transitionDelay = D(300 + i * 50); p.style.opacity = 1; });
       }
     },
     finish() { this.d.forEach((c, i) => DECK.pos(c, S10.x[i], S10.yA)); },
@@ -176,9 +176,9 @@
       clearTimeout(this.tm1); clearTimeout(this.tm2); clearTimeout(this.tm3);
       this.stage(1, instant);
       if (instant) { this.stage(2, true); this.stage(3, true); this.stage(4, true); return; }
-      this.tm1 = setTimeout(() => this.stage(2, false), 1100);
-      this.tm2 = setTimeout(() => this.stage(3, false), 2000);
-      this.tm3 = setTimeout(() => this.stage(4, false), 3000);
+      this.tm1 = setTimeout(() => this.stage(2, false), 500);
+      this.tm2 = setTimeout(() => this.stage(3, false), 1000);
+      this.tm3 = setTimeout(() => this.stage(4, false), 1500);
     },
     stage(k, instant) {
       const I = instant;
@@ -323,12 +323,12 @@
       this.p.forEach((c) => { c.style.transitionDelay = '0ms'; c.style.opacity = 1; });
       if (instant) { this.prog.setAttribute('x2', 1588); this.p.forEach((c) => (c.style.transition = '')); this.at(1588); return; }
       // 줄을 따라 천천히 12주 끝까지
-      this.p.forEach((c) => { c.style.transition = 'transform 3.2s cubic-bezier(.45,0,.25,1), opacity .6s'; });
-      const t0 = performance.now(), dur = 3200;
-      const tick = (now) => { const q = Math.min(1, (now - t0 - 500) / dur); if (q > 0) this.prog.setAttribute('x2', 332 + (1588 - 332) * (q < 0.5 ? 2 * q * q : 1 - Math.pow(-2 * q + 2, 2) / 2)); if (q < 1) requestAnimationFrame(tick); };
+      this.p.forEach((c) => { c.style.transition = 'transform 1.6s cubic-bezier(.45,0,.25,1), opacity .6s'; });
+      const t0 = performance.now(), dur = 1600;
+      const tick = (now) => { const q = Math.min(1, (now - t0 - 200) / dur); if (q > 0) this.prog.setAttribute('x2', 332 + (1588 - 332) * (q < 0.5 ? 2 * q * q : 1 - Math.pow(-2 * q + 2, 2) / 2)); if (q < 1) requestAnimationFrame(tick); };
       requestAnimationFrame(tick);
-      this.t.push(setTimeout(() => this.at(1588), 500));
-      this.t.push(setTimeout(() => { this.prog.setAttribute('x2', 1588); }, 4000));
+      this.t.push(setTimeout(() => this.at(1588), 200));
+      this.t.push(setTimeout(() => { this.prog.setAttribute('x2', 1588); }, 2000));
     },
   };
 
