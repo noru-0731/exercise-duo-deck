@@ -88,7 +88,20 @@
     const r2 = DECK.rng(5);
     for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(r2() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
     S10.rand = []; S10.near = [];
-    for (let i = 0; i < S10.n; i += 2) { S10.rand.push([idx[i], idx[i + 1]]); S10.near.push([i, i + 1]); }
+    for (let i = 0; i < S10.n; i += 2) S10.rand.push([idx[i], idx[i + 1]]);
+    // 아래 줄: 2분 걷기를 뺀 네 항목으로 맞춘 짝. 네 항목은 2분 걷기와 완전히 같지 않으므로
+    // 2분 걷기 순서에 흔들림을 섞어 둘씩 맺고, 짝 간격 평균이 아무렇게나의 약 0.76배(15.5/20.5)가 되는 흔들림을 고른다
+    const gap = (pp) => pp.reduce((t, [a, b]) => t + Math.abs(v[a] - v[b]), 0) / pp.length;
+    const target = gap(S10.rand) * (15.5 / 20.5);
+    let best = null;
+    for (let seed = 1; seed < 400; seed++) {
+      const r3 = DECK.rng(seed);
+      const ord = [...Array(S10.n).keys()].map((i) => [i, v[i] + (r3() + r3() + r3() - 1.5) * 260]).sort((p, q) => p[1] - q[1]).map((p) => p[0]);
+      const pp = []; for (let i = 0; i < S10.n; i += 2) pp.push([ord[i], ord[i + 1]]);
+      const e = Math.abs(gap(pp) - target);
+      if (!best || e < best.e) best = { e, pp };
+    }
+    S10.near = best.pp;
   })();
   function arc(svg, x1, x2, y, col, w) {
     const dx = Math.abs(x2 - x1);
