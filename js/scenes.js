@@ -115,7 +115,7 @@
       const txt = (s, d, t, b) => `<div data-s="${s}" style="flex:1;transition-delay:${d}ms"><div style="font-size:22px;color:var(--mut)">${t}</div><div style="font-size:28px;font-weight:600;color:var(--ink);margin-top:10px;line-height:1.45">${b}</div></div>`;
       ph.innerHTML =
         txt(1, 0, '1~4주', '지도자가 집으로 찾아가<br>데리고 나온다. 매번 같이 한다') +
-        txt(2, 0, '5~8주', '지도자는 한 번씩 빠진다.<br>빠진 날은 짝끼리 한다') +
+        txt(2, 0, '5~8주', '지도자가 한 번씩 쉰다.<br>쉬는 날은 짝끼리 한다') +
         txt(2, 500, '9~12주', '짝끼리 한다.<br>12주에 다시 측정한다');
     },
   };
