@@ -63,12 +63,25 @@ header { left:var(--side); top:65px; height:82px; display:flex; align-items:cent
 #basics { display:grid; grid-template-columns:repeat(3,1fr); padding:19px 0; border-radius:20px; background:var(--gray) }
 #basics div { padding-left:28px }
 #basics div+div { border-left:2px solid white }
-#basics span { display:block; font-size:var(--label); color:var(--sub) }
+#basics div > span { display:block; font-size:var(--label); color:var(--sub) }
 #basics b { display:block; font-size:60px; line-height:1.08; font-weight:760 }
 .tablet-row { position:relative; overflow:hidden }
-.metric { display:flex; align-items:center; justify-content:space-between; height:108px; border-bottom:2px solid var(--edge); font-size:var(--body); font-weight:690 }
+.metric { display:flex; align-items:center; justify-content:space-between; height:108px; border-bottom:2px solid color-mix(in srgb,var(--edge) var(--row-alpha,100%),transparent); font-size:var(--body); font-weight:690 }
+.metric > span { opacity:var(--row-alpha,100%) }
 .metric b { font-size:var(--number); line-height:1; letter-spacing:-.045em; font-weight:820 }
 .unit { display:inline-block; font-size:var(--label); margin-left:6px; letter-spacing:-.02em }
+.measurement-value { position:relative }
+.measurement-value.is-pending .measurement-complete { visibility:hidden }
+.measurement-entry { position:absolute; top:0; left:0; white-space:nowrap }
+.measurement-value.show-caret .measurement-entry::after {
+  content:""; display:inline-block; width:3px; height:.72em; margin-left:4px;
+  vertical-align:-.04em; background:var(--ink);
+}
+.measurement-value.is-typing::after {
+  content:""; position:absolute; right:0; bottom:-4px; left:0; height:3px;
+  border-radius:2px; background:var(--pink);
+}
+#basics .measurement-value.is-typing::after { right:28px }
 #registered { display:flex; align-items:center; gap:14px; height:70px; margin-top:12px; padding:0 19px; border-radius:16px; background:var(--tint); color:var(--red); font-size:var(--label); font-weight:710 }
 #registered strong { font-size:54px; line-height:1; font-weight:830 }
 
@@ -177,9 +190,17 @@ header { left:var(--side); top:65px; height:82px; display:flex; align-items:cent
   <div>
     <div class="device-title"><svg class="ic" aria-hidden="true"><use href="#clipboard"/></svg>지도자 체력 측정 기록</div>
     <h2 data-value="hero"></h2>
-    <div id="basics"><div><span>나이</span><b data-value="age"></b></div><div><span>키</span><b>166cm</b></div><div><span>체중</span><b>61kg</b></div></div>
-    <div class="tablet-row"><div id="chairRow" class="metric"><span>의자 일어서기</span><b><span data-value="chair0"></span><small class="unit">회</small></b></div></div>
-    <div class="tablet-row"><div id="walkRow" class="metric"><span>2분 제자리 걷기</span><b><span data-value="walk0"></span><small class="unit">회</small></b></div></div>
+    <div id="basics">
+      <div><span>나이</span><b id="ageValue" class="measurement-value"><span class="measurement-complete"><span data-value="age"></span>세</span></b></div>
+      <div><span>키</span><b id="heightValue" class="measurement-value"><span class="measurement-complete"><span>166</span>cm</span></b></div>
+      <div><span>체중</span><b id="weightValue" class="measurement-value"><span class="measurement-complete"><span>61</span>kg</span></b></div>
+    </div>
+    <div class="tablet-row">
+      <div id="chairRow" class="metric"><span>의자 일어서기</span><b id="chairValue" class="measurement-value"><span class="measurement-complete"><span data-value="chair0"></span><small class="unit">회</small></span></b></div>
+    </div>
+    <div class="tablet-row">
+      <div id="walkRow" class="metric"><span>2분 제자리 걷기</span><b id="walkValue" class="measurement-value"><span class="measurement-complete"><span data-value="walk0"></span><small class="unit">회</small></span></b></div>
+    </div>
     <div class="tablet-row"><p id="registered"><svg class="ic" aria-hidden="true"><use href="#check"/></svg><span><strong data-value="total"></strong>명 등록</span></p></div>
   </div>
 </section>
@@ -249,7 +270,7 @@ const named = name => name + ' 님';
 const values = {
   total: people.length, pairs: pairs.length, hero: named(hero.name), first: named(hero.first),
   second: named(hero.second), unmatched: named(unmatched), pair: named(hero.name) + ' · ' + named(hero.first),
-  age: hero.age + '세', place: hero.place, time: hero.time,
+  age: hero.age, place: hero.place, time: hero.time,
   chair0: hero.chair[0], chair1: hero.chair[1], walk0: hero.walk[0], walk1: hero.walk[1]
 };
 document.querySelectorAll('[data-value]').forEach(el => { el.textContent = values[el.dataset.value]; });
@@ -541,7 +562,34 @@ function drawHeading(t) {
 }
 
 const baselineValues = get('before').querySelectorAll('b span, b small');
-const tabletRows = [['chairRow', 6.22, 108], ['walkRow', 8.02, 108], ['registered', 10.16, 82]];
+const tabletRows = [
+  ['chairRow', 6.22, 108, .20], ['walkRow', 8.02, 108, .12], ['registered', 10.16, 82, .42]
+];
+// 시작과 첫 글자까지의 간격은 0.01초 단위다. 숫자 뒤에 단위를 한 번에 붙인다.
+const measurementInterval = 12;
+const measurementFields = [
+  ['ageValue', 452, 12], ['heightValue', 500, 12], ['weightValue', 560, 12],
+  ['chairValue', 628, 12], ['walkValue', 802, 6]
+].map(([id, start, lead]) => {
+  const field = get(id);
+  const digits = field.querySelector('.measurement-complete > span').textContent;
+  const entry = document.createElement('span');
+  entry.className = 'measurement-entry';
+  field.append(entry);
+  const keyTimes = Array.from(digits, (_, i) => (start + lead + i * measurementInterval) / 100);
+  const end = (start + lead + digits.length * measurementInterval) / 100;
+  return { field, digits, entry, keyTimes, start: start / 100, end };
+});
+function drawMeasurements(t) {
+  for (const { field, digits, entry, keyTimes, start, end } of measurementFields) {
+    const active = t >= start && t < end;
+    const caretOn = active && (t - start) % .5 < .25;
+    field.classList.toggle('is-pending', t < end);
+    field.classList.toggle('is-typing', active);
+    field.classList.toggle('show-caret', caretOn);
+    entry.textContent = active ? digits.slice(0, keyTimes.filter(time => t >= time).length) : '';
+  }
+}
 window.DUR = 56;
 window.render = function render(seconds) {
   const t = Math.max(0, Math.min(window.DUR, Number(seconds) || 0));
@@ -549,11 +597,14 @@ window.render = function render(seconds) {
   show('intro', scene(t, 0, 4));
   centeredCard(t, 'tablet', 4, 13, .012, 420);
   reveal(get('basics'), ease(t, 4.18, .34));
-  tabletRows.forEach(([id, start, height]) => {
+  tabletRows.forEach(([id, start, height, duration]) => {
     const row = get(id);
-    row.parentElement.style.height = height * ease(t, start, .42) + 'px';
-    reveal(row, progress(t, start + .06, .36));
+    row.parentElement.style.height = height * ease(t, start, duration) + 'px';
+    const alpha = progress(t, start + .06, .36);
+    if (id === 'registered') reveal(row, alpha);
+    else row.style.setProperty('--row-alpha', 100 * alpha + '%');
   });
+  drawMeasurements(t);
 
   centeredCard(t, 'pairCard', 24, 30, .013);
   drawFollowup(t);
